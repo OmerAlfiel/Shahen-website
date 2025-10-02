@@ -29,14 +29,14 @@ export default function Footer() {
 							<ul className='space-y-2'>
 								<li>
 									<a
-										href='/'
+										href='/contact'
 										className='text-gray-400 hover:text-emerald-400 transition-colors hover:translate-x-1 inline-block'>
 										{t("contactUs")}
 									</a>
 								</li>
 								<li>
 									<a
-										href='/'
+										href='/faq'
 										className='text-gray-400 hover:text-emerald-400 transition-colors hover:translate-x-1 inline-block'>
 										{t("commonQuestions")}
 									</a>
@@ -52,21 +52,21 @@ export default function Footer() {
 							<ul className='space-y-2'>
 								<li>
 									<a
-										href='/'
+										href='/terms'
 										className='text-gray-400 hover:text-emerald-400 transition-colors hover:translate-x-1 inline-block'>
 										{t("termsOfUse")}
 									</a>
 								</li>
 								<li>
 									<a
-										href='/'
+										href='/privacy'
 										className='text-gray-400 hover:text-emerald-400 transition-colors hover:translate-x-1 inline-block'>
 										{t("privacyPolicy")}
 									</a>
 								</li>
 								<li>
 									<a
-										href='/'
+										href='/delete-account'
 										className='text-gray-400 hover:text-emerald-400 transition-colors hover:translate-x-1 inline-block'>
 										{t("deleteAccount")}
 									</a>
