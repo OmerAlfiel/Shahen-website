@@ -31,21 +31,15 @@ const LoginPage: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch("/api/auth/send-otp", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ phoneNumber }),
-			});
+			// Mock API call - simulate sending OTP
+			await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
 
-			const data = await response.json();
-
-			if (!response.ok) {
-				throw new Error(data.message || t("otpSendError"));
+			// For demo purposes, accept any phone number
+			if (phoneNumber.length >= 10) {
+				setStep("otp");
+			} else {
+				throw new Error("Please enter a valid phone number");
 			}
-
-			setStep("otp");
 		} catch (err) {
 			setError(err instanceof Error ? err.message : t("otpSendError"));
 		} finally {
@@ -59,26 +53,24 @@ const LoginPage: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch("/api/auth/verify-otp", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ phoneNumber, otp }),
-			});
+			// Mock API call - simulate OTP verification
+			await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate network delay
 
-			const data = await response.json();
+			// For demo purposes, accept OTP "123456" or any 6-digit code
+			if (otp.length === 6) {
+				// Simulate checking if user needs to complete profile
+				// For demo, assume new users need to complete profile
+				const isExistingUser = localStorage.getItem("userProfile");
 
-			if (!response.ok) {
-				throw new Error(data.message || t("otpVerifyError"));
-			}
-
-			// Check if user needs to complete profile
-			if (data.needsProfile) {
-				setStep("complete");
+				if (isExistingUser) {
+					// User already has profile, redirect to dashboard
+					navigate("/dashboard");
+				} else {
+					// User needs to complete profile
+					setStep("complete");
+				}
 			} else {
-				// User already has profile, redirect to dashboard
-				navigate("/dashboard");
+				throw new Error("Please enter a valid 6-digit OTP code");
 			}
 		} catch (err) {
 			setError(err instanceof Error ? err.message : t("otpVerifyError"));
@@ -93,19 +85,36 @@ const LoginPage: React.FC = () => {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch("/api/auth/complete-profile", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ phoneNumber, ...formData }),
-			});
+			// Mock API call - simulate profile completion
+			await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
 
-			const data = await response.json();
+			// Validate required fields
+			const requiredFields = [
+				"companyName",
+				"email",
+				"taxNumber",
+				"city",
+				"postalCode",
+				"address",
+				"managerName",
+			];
+			const missingFields = requiredFields.filter(
+				(field) => !formData[field as keyof typeof formData]
+			);
 
-			if (!response.ok) {
-				throw new Error(data.message || t("profileCompleteError"));
+			if (missingFields.length > 0) {
+				throw new Error("Please fill in all required fields");
 			}
+
+			// Save user profile to localStorage for demo purposes
+			const userProfile = {
+				phoneNumber,
+				...formData,
+				createdAt: new Date().toISOString(),
+			};
+
+			localStorage.setItem("userProfile", JSON.stringify(userProfile));
+			localStorage.setItem("isAuthenticated", "true");
 
 			// Redirect to dashboard
 			navigate("/dashboard");
@@ -168,6 +177,12 @@ const LoginPage: React.FC = () => {
 									/>
 								</div>
 
+								{/* Demo Notice */}
+								<div className='bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm'>
+									<strong>Demo Mode:</strong> Enter any phone number (10+
+									digits) to continue.
+								</div>
+
 								{error && (
 									<div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm'>
 										{error}
@@ -211,6 +226,12 @@ const LoginPage: React.FC = () => {
 										maxLength={6}
 										disabled={isLoading}
 									/>
+								</div>
+
+								{/* Demo Notice */}
+								<div className='bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm'>
+									<strong>Demo Mode:</strong> Enter any 6-digit code (e.g.,
+									123456) to continue.
 								</div>
 
 								{error && (
