@@ -156,12 +156,9 @@
 		height: auto;
 		border-radius: 12px;
 		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
-	}
-
-	.about-img:hover img {
-		transform: scale(1.05);
-		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+		/* Removed hover interactions */
+		pointer-events: none;
+		user-select: none;
 	}
 
 	.about-content p {
@@ -174,9 +171,16 @@
 	}
 
 	.header-title {
-		color: #2d3748;
-		font-weight: 700;
-		margin-bottom: 3rem;
+		color: #2d3748 !important;
+		font-weight: 700 !important;
+		margin-bottom: 3rem !important;
+		font-size: 2rem !important;
+		line-height: 1.4 !important;
+		text-align: center !important;
+		direction: rtl !important;
+		display: block !important;
+		visibility: visible !important;
+		opacity: 1 !important;
 	}
 
 	/* Bootstrap-like grid system */

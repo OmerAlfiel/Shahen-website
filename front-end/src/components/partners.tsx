@@ -1,127 +1,187 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useLanguage } from "../contexts/language-context";
 import AnimatedSection from "./animated-section";
 
 export default function Partners() {
 	const { language } = useLanguage();
 	const [currentIndex, setCurrentIndex] = useState(0);
+	const [isHovered, setIsHovered] = useState(false);
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
+	const ITEMS_PER_VIEW = 4;
+	const AUTO_ADVANCE_DELAY = 3000;
+	const TRANSITION_SPEED = 1;
 
-	const partners = [
-		{
-			name: "Partner 1",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+1",
-		},
-		{
-			name: "Partner 2",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+2",
-		},
-		{
-			name: "Partner 3",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+3",
-		},
-		{
-			name: "Partner 4",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+4",
-		},
-		{
-			name: "Partner 5",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+5",
-		},
-		{
-			name: "Partner 6",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+6",
-		},
-		{
-			name: "Partner 7",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+7",
-		},
-		{
-			name: "Partner 8",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+8",
-		},
-		{
-			name: "Partner 9",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+9",
-		},
-		{
-			name: "Partner 10",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+10",
-		},
-		{
-			name: "Partner 11",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+11",
-		},
-		{
-			name: "Partner 12",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+12",
-		},
-		{
-			name: "Partner 13",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+13",
-		},
-		{
-			name: "Partner 14",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+14",
-		},
-		{
-			name: "Partner 15",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+15",
-		},
-		{
-			name: "Partner 16",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+16",
-		},
-		{
-			name: "Partner 17",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+17",
-		},
-		{
-			name: "Partner 18",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+18",
-		},
-		{
-			name: "Partner 19",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+19",
-		},
-		{
-			name: "Partner 20",
-			src: "https://via.placeholder.com/200x100/f0f0f0/666?text=Partner+20",
-		},
-	];
+	const partners = useMemo(
+		() => [
+			{
+				name: "Partner 1",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 2",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 3",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 4",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 5",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 6",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 7",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 8",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 9",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 10",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 11",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 12",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 13",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 14",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 15",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 16",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 17",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 18",
+				src: "/Partners/Partner (27).png",
+			},
+			{
+				name: "Partner 19",
+				src: "/Partners/Partner (20).png",
+			},
+			{
+				name: "Partner 20",
+				src: "/Partners/Partner (27).png",
+			},
+		],
+		[]
+	);
 
-	// Auto-advance carousel
-	useEffect(() => {
+	// Start auto-advance timer
+	const startAutoAdvance = useCallback(() => {
+		if (intervalRef.current) {
+			clearInterval(intervalRef.current);
+		}
 		intervalRef.current = setInterval(() => {
-			setCurrentIndex((prevIndex) => (prevIndex + 4) % partners.length);
-		}, 3000);
-
-		return () => {
-			if (intervalRef.current) {
-				clearInterval(intervalRef.current);
-			}
-		};
+			setCurrentIndex(
+				(prevIndex) => (prevIndex + TRANSITION_SPEED) % partners.length
+			);
+		}, AUTO_ADVANCE_DELAY);
 	}, [partners.length]);
 
-	const nextSlide = () => {
-		setCurrentIndex((prevIndex) => (prevIndex + 4) % partners.length);
-	};
+	// Stop auto-advance timer
+	const stopAutoAdvance = useCallback(() => {
+		if (intervalRef.current) {
+			clearInterval(intervalRef.current);
+			intervalRef.current = null;
+		}
+	}, []);
 
-	const prevSlide = () => {
-		setCurrentIndex((prevIndex) =>
-			prevIndex === 0 ? partners.length - 4 : prevIndex - 4
-		);
-	};
+	// Auto-advance carousel effect
+	useEffect(() => {
+		if (!isHovered) {
+			startAutoAdvance();
+		} else {
+			stopAutoAdvance();
+		}
 
-	const getVisiblePartners = () => {
+		return () => {
+			stopAutoAdvance();
+		};
+	}, [isHovered, startAutoAdvance, stopAutoAdvance]);
+
+	// Handle manual navigation
+	const handleManualNavigation = useCallback(
+		(newIndex: number) => {
+			setCurrentIndex(newIndex);
+			// Restart auto-advance timer after manual navigation
+			if (!isHovered) {
+				startAutoAdvance();
+			}
+		},
+		[isHovered, startAutoAdvance]
+	);
+
+	const nextSlide = useCallback(() => {
+		const newIndex = (currentIndex + ITEMS_PER_VIEW) % partners.length;
+		handleManualNavigation(newIndex);
+	}, [currentIndex, partners.length, handleManualNavigation]);
+
+	const prevSlide = useCallback(() => {
+		const newIndex =
+			currentIndex === 0
+				? partners.length - ITEMS_PER_VIEW
+				: currentIndex - ITEMS_PER_VIEW;
+		handleManualNavigation(newIndex);
+	}, [currentIndex, partners.length, handleManualNavigation]);
+
+	const goToSlide = useCallback(
+		(slideIndex: number) => {
+			const newIndex = slideIndex * ITEMS_PER_VIEW;
+			handleManualNavigation(newIndex);
+		},
+		[handleManualNavigation]
+	);
+
+	// Get visible partners for infinite loop
+	const getVisiblePartners = useCallback(() => {
 		const visible = [];
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < ITEMS_PER_VIEW; i++) {
 			visible.push(partners[(currentIndex + i) % partners.length]);
 		}
 		return visible;
-	};
+	}, [currentIndex, partners]);
+
+	// Mouse event handlers
+	const handleMouseEnter = useCallback(() => {
+		setIsHovered(true);
+	}, []);
+
+	const handleMouseLeave = useCallback(() => {
+		setIsHovered(false);
+	}, []);
 
 	return (
 		<section className='py-16 md:py-24 bg-white/95 backdrop-blur-sm relative'>
@@ -144,7 +204,11 @@ export default function Partners() {
 				</AnimatedSection>
 
 				{/* Carousel Container */}
-				<div className='relative' dir={language === "ar" ? "ltr" : "ltr"}>
+				<div
+					className='relative'
+					dir={language === "ar" ? "ltr" : "ltr"}
+					onMouseEnter={handleMouseEnter}
+					onMouseLeave={handleMouseLeave}>
 					<div className='overflow-hidden'>
 						<div className='flex gap-6 transition-transform duration-500 ease-in-out'>
 							{getVisiblePartners().map((partner, index) => (
@@ -206,20 +270,20 @@ export default function Partners() {
 
 				{/* Dots indicator */}
 				<div className='flex justify-center mt-8 gap-2'>
-					{Array.from({ length: Math.ceil(partners.length / 4) }).map(
-						(_, index) => (
-							<button
-								key={index}
-								onClick={() => setCurrentIndex(index * 4)}
-								className={`w-3 h-3 rounded-full transition-all duration-300 ${
-									Math.floor(currentIndex / 4) === index
-										? "bg-emerald-600 scale-125"
-										: "bg-gray-300 hover:bg-emerald-400"
-								}`}
-								aria-label={`Go to slide ${index + 1}`}
-							/>
-						)
-					)}
+					{Array.from({
+						length: Math.ceil(partners.length / ITEMS_PER_VIEW),
+					}).map((_, index) => (
+						<button
+							key={index}
+							onClick={() => goToSlide(index)}
+							className={`w-3 h-3 rounded-full transition-all duration-300 ${
+								Math.floor(currentIndex / ITEMS_PER_VIEW) === index
+									? "bg-emerald-600 scale-125"
+									: "bg-gray-300 hover:bg-emerald-400"
+							}`}
+							aria-label={`Go to slide ${index + 1}`}
+						/>
+					))}
 				</div>
 			</div>
 		</section>
