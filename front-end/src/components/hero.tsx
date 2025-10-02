@@ -67,9 +67,6 @@ export default function Hero() {
 							<button className='text-[#3BA776] font-bold text-lg md:text-xl pb-1 border-b-2 border-[#3BA776]'>
 								{language === "ar" ? "أطلب الآن" : "Order Now"}
 							</button>
-							<button className='text-gray-400 font-semibold text-lg md:text-xl pb-1 hidden md:inline-block'>
-								{language === "ar" ? "العقد" : "Contract"}
-							</button>
 						</div>
 					</div>
 
