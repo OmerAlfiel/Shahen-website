@@ -32,11 +32,11 @@ const Header: React.FC = () => {
 	}, [lastScrollY]);
 
 	const navLinks = [
-		{ id: "index", label: t("home"), href: "/" },
-		{ id: "business", label: t("business"), href: "/#business" },
-		{ id: "partners", label: t("serviceProviders"), href: "/#partners" },
-		{ id: "about", label: t("about"), href: "/#about" },
 		{ id: "contactus", label: t("contact"), href: "/contact" },
+		{ id: "about", label: t("about"), href: "/#about" },
+		{ id: "partners", label: t("serviceProviders"), href: "/#partners" },
+		{ id: "business", label: t("business"), href: "/#business" },
+		{ id: "index", label: t("home"), href: "/" },
 	];
 
 	return (
@@ -45,12 +45,12 @@ const Header: React.FC = () => {
 				isVisible ? "translate-y-0" : "-translate-y-full"
 			}`}>
 			<nav className='container mx-auto px-4'>
-				<div className='flex items-center justify-between py-3'>
-					{/* Logo Section - order-1 in LTR (left), order-3 in RTL (right) */}
-					<div
-						className={`flex-shrink-0 ${
-							language === "ar" ? "order-3" : "order-1"
-						}`}>
+				<div
+					className={`flex items-center justify-between py-3 ${
+						language === "ar" ? "flex-row-reverse" : "flex-row"
+					}`}>
+					{/* Logo Section */}
+					<div className='flex-shrink-0'>
 						<a
 							href='/'
 							className='flex items-center cursor-pointer'
@@ -71,8 +71,8 @@ const Header: React.FC = () => {
 						</a>
 					</div>
 
-					{/* Desktop Navigation - order-2 in both (stays centered) */}
-					<div className='hidden lg:flex items-center justify-center flex-1 mx-8 order-2'>
+					{/* Desktop Navigation */}
+					<div className='hidden lg:flex items-center justify-center flex-1 mx-8'>
 						<ul
 							className={`flex items-center gap-8 ${
 								language === "ar" ? "flex-row-reverse" : ""
@@ -94,11 +94,8 @@ const Header: React.FC = () => {
 						</ul>
 					</div>
 
-					{/* Buttons Section - order-3 in LTR (right), order-1 in RTL (left) */}
-					<div
-						className={`flex items-center gap-3 ${
-							language === "ar" ? "order-1 flex-row-reverse" : "order-3"
-						}`}>
+					{/* Buttons Section */}
+					<div className='flex items-center gap-3'>
 						{/* Language Switcher */}
 						<div
 							className={`flex items-center bg-gray-100 rounded-lg overflow-hidden border border-emerald-600 ${
