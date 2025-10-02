@@ -107,7 +107,7 @@ export default function MapboxInput({
 				const map = new mapboxgl.default.Map({
 					container: mapContainerRef.current!,
 					style: "mapbox://styles/mapbox/streets-v12",
-					center: [46.6753, 24.7136], // Riyadh coordinates
+					center: [46.6753, 24.7136],
 					zoom: 11,
 				});
 
@@ -182,7 +182,7 @@ export default function MapboxInput({
 					handleSearch(e.target.value);
 				}}
 				placeholder={placeholder}
-				className={`w-full px-4 py-3 ${
+				className={`w-full h-14 px-3 ${
 					language === "ar" ? "pr-24" : "pl-24"
 				} bg-[#F5F5F5] border border-gray-200 rounded-lg ${
 					language === "ar" ? "text-right" : "text-left"
@@ -191,14 +191,14 @@ export default function MapboxInput({
 			<button
 				onClick={() => setShowMap(!showMap)}
 				className={`absolute ${
-					language === "ar" ? "left-2" : "right-2"
-				} top-1/2 -translate-y-1/2 bg-[#3BA776] hover:bg-[#35996B] text-white px-4 py-1.5 rounded-md text-sm transition-colors`}>
+					language === "ar" ? "left-3" : "right-3"
+				} top-1/2 -translate-y-1/2 text-emerald-600 font-semibold text-sm`}>
 				{language === "ar" ? "خريطة" : "Map"}
 			</button>
 
 			{/* Suggestions Dropdown */}
 			{suggestions.length > 0 && (
-				<div className='absolute z-50 w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-60 overflow-y-auto'>
+				<div className='absolute z-[60] w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-60 overflow-y-auto'>
 					{suggestions.map((suggestion, index) => (
 						<button
 							key={index}
