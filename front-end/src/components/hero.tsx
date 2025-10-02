@@ -14,9 +14,9 @@ export default function Hero() {
 	const [deliveryLocation2, setDeliveryLocation2] = useState("");
 
 	return (
-		<div className='relative min-h-[100vh] bg-[#3BA776] overflow-hidden pt-16 md:pt-20'>
-			{/* Background pattern */}
-			<div className='absolute inset-0 opacity-10'>
+		<div className='relative min-h-[100vh] bg-gradient-to-br from-emerald-500 to-emerald-700 overflow-hidden pt-16 md:pt-20'>
+			{/* Background pattern with glass effect */}
+			<div className='absolute inset-0 opacity-20'>
 				<div
 					className='absolute inset-0'
 					style={{
@@ -24,8 +24,8 @@ export default function Hero() {
               45deg,
               transparent,
               transparent 35px,
-              rgba(0,0,0,0.2) 35px,
-              rgba(0,0,0,0.2) 70px
+              rgba(255,255,255,0.1) 35px,
+              rgba(255,255,255,0.1) 70px
             )`,
 					}}
 				/>
@@ -34,10 +34,11 @@ export default function Hero() {
 			{/* Decorative elements */}
 			<div className='absolute top-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-xl'></div>
 			<div className='absolute bottom-20 left-10 w-48 h-48 bg-white/5 rounded-full blur-2xl'></div>
+			<div className='absolute top-1/2 left-1/4 w-64 h-64 bg-white/5 rounded-full blur-3xl'></div>
 
-			{/* Slanted bottom section */}
+			{/* Slanted bottom section - transparent to let background show */}
 			<div
-				className='absolute left-0 right-0 h-[300px] bg-[#F5F5F5]'
+				className='absolute left-0 right-0 h-[300px] bg-transparent'
 				style={{
 					bottom: "-50px",
 					transform: "skewY(-3deg)",
@@ -55,7 +56,7 @@ export default function Hero() {
 				</h1>
 
 				{/* Order form */}
-				<div className='max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl p-8 md:p-10 backdrop-blur-sm border border-white/20'>
+				<div className='max-w-5xl mx-auto bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-8 md:p-10 border border-white/20'>
 					<div className='flex items-center justify-between mb-6'>
 						<h2
 							className={`text-xl md:text-2xl font-bold text-[#3BA776] ${
@@ -123,11 +124,13 @@ export default function Hero() {
 
 								{/* Delivery Location 1 */}
 								<div className='flex-1 w-full'>
-									<MapboxInput
-										placeholder='عنوان التسليم 1'
-										value={deliveryLocation1}
-										onChange={(value) => setDeliveryLocation1(value)}
-									/>
+									<div style={{ textAlign: "start" }}>
+										<MapboxInput
+											placeholder='عنوان التسليم 1'
+											value={deliveryLocation1}
+											onChange={(value) => setDeliveryLocation1(value)}
+										/>
+									</div>
 								</div>
 
 								{/* Second Delivery Location - conditional */}

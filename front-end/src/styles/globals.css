@@ -60,10 +60,83 @@
 			"Helvetica Neue", sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+		overflow-x: hidden;
 	}
 
 	code {
 		font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
 			monospace;
+	}
+
+	/* Fixed Background Utilities */
+	.fixed-bg-layer {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: -1;
+		background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+	}
+
+	.fixed-bg-layer::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: url("/images/bgicon.jpg");
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		opacity: 0.1;
+		z-index: 1;
+	}
+
+	.fixed-bg-layer::after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(
+			to bottom,
+			rgba(26, 26, 26, 0.8) 0%,
+			rgba(26, 26, 26, 0.1) 50%,
+			rgba(26, 26, 26, 0.8) 100%
+		);
+		z-index: 2;
+	}
+
+	/* Scroll effects */
+	.scroll-content {
+		position: relative;
+		z-index: 10;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+
+	/* Parallax effect */
+	.parallax-content {
+		transform: translateZ(0);
+		will-change: transform;
+	}
+
+	/* Glass morphism effects */
+	.glass-effect {
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.glass-dark {
+		background: rgba(17, 24, 39, 0.95);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 }

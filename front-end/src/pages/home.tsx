@@ -12,10 +12,10 @@ const HomePage: React.FC = () => {
 
 	return (
 		<main
-			className='min-h-screen relative'
+			className='min-h-screen relative bg-transparent'
 			dir={language === "ar" ? "rtl" : "ltr"}>
 			<Hero />
-			<div className='bg-[#F5F5F5] relative z-10'>
+			<div className='bg-white/95 backdrop-blur-sm relative z-10 shadow-lg'>
 				<TruckTypes />
 				<Features />
 				<HowItWorks />

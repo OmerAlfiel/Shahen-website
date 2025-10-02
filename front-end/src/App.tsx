@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./contexts/language-context";
 import Header from "./components/header";
 import Footer from "./components/footer";
+import FixedBackground from "./components/fixed-background";
 import HomePage from "./pages/home";
 import ContactPage from "./pages/contact";
 import LoginPage from "./pages/login";
@@ -14,7 +15,11 @@ function App() {
 	return (
 		<LanguageProvider>
 			<Router>
-				<div className='min-h-screen flex flex-col'>
+				{/* Fixed Background Layer */}
+				<FixedBackground />
+
+				{/* Main Content Layer */}
+				<div className='min-h-screen flex flex-col relative z-10'>
 					<Header />
 					<main className='flex-1'>
 						<Routes>
