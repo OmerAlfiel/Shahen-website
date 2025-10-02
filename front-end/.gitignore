@@ -23,10 +23,7 @@ dist/
 .nuxt/
 
 # Node modules cache and build artifacts
-node_modules/.cache/
-node_modules/**/.cache
-**/node_modules/.cache/**
-**/babel-loader/**
+node_modules/
 
 # IDE and editor files
 .vscode/

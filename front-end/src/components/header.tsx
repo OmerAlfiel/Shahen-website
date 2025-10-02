@@ -49,53 +49,13 @@ const Header: React.FC = () => {
 					className={`flex items-center justify-between py-3 ${
 						language === "ar" ? "flex-row-reverse" : "flex-row"
 					}`}>
-					{/* Logo Section */}
-					<div className='flex-shrink-0'>
-						<a
-							href='/'
-							className='flex items-center cursor-pointer'
-							onClick={() => setActiveLink("index")}>
-							{language === "ar" ? (
-								<img
-									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahenLogoUrdu-XV3pQbfUgCssBVI00Jfa7org5FbYHk.svg'
-									alt='Shahen Logo'
-									className='h-10 w-auto'
-								/>
-							) : (
-								<img
-									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahen-logo-Xc4HHjimnrigekeA868rIKYRlyheij.svg'
-									alt='Shahen Logo'
-									className='h-10 w-auto'
-								/>
-							)}
-						</a>
-					</div>
-
-					{/* Desktop Navigation */}
-					<div className='hidden lg:flex items-center justify-center flex-1 mx-8'>
-						<ul
-							className={`flex items-center gap-8 ${
-								language === "ar" ? "flex-row-reverse" : ""
-							}`}>
-							{navLinks.map((link) => (
-								<li key={link.id}>
-									<a
-										href={link.href}
-										onClick={() => setActiveLink(link.id)}
-										className={`text-base font-medium transition-colors hover:text-emerald-600 ${
-											activeLink === link.id
-												? "text-emerald-600"
-												: "text-gray-700"
-										}`}>
-										{link.label}
-									</a>
-								</li>
-							))}
-						</ul>
-					</div>
-
 					{/* Buttons Section */}
-					<div className='flex items-center gap-3'>
+					<div
+						className={`flex items-center ${
+							language === "ar"
+								? "flex-row-reverse gap-3 space-x-reverse"
+								: "gap-3"
+						}`}>
 						{/* Language Switcher */}
 						<div
 							className={`flex items-center bg-gray-100 rounded-lg overflow-hidden border border-emerald-600 ${
@@ -163,6 +123,49 @@ const Header: React.FC = () => {
 								</svg>
 							)}
 						</button>
+					</div>
+					{/* Desktop Navigation */}
+					<div className='hidden lg:flex items-center justify-center flex-1 mx-8'>
+						<ul
+							className={`flex items-center gap-8 ${
+								language === "ar" ? "flex-row-reverse" : ""
+							}`}>
+							{navLinks.map((link) => (
+								<li key={link.id}>
+									<a
+										href={link.href}
+										onClick={() => setActiveLink(link.id)}
+										className={`text-base font-medium transition-colors hover:text-emerald-600 ${
+											activeLink === link.id
+												? "text-emerald-600"
+												: "text-gray-700"
+										}`}>
+										{link.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+					{/* Logo Section */}
+					<div className='flex-shrink-0'>
+						<a
+							href='/'
+							className='flex items-center cursor-pointer'
+							onClick={() => setActiveLink("index")}>
+							{language === "ar" ? (
+								<img
+									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahenLogoUrdu-XV3pQbfUgCssBVI00Jfa7org5FbYHk.svg'
+									alt='Shahen Logo'
+									className='h-10 w-auto'
+								/>
+							) : (
+								<img
+									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahen-logo-Xc4HHjimnrigekeA868rIKYRlyheij.svg'
+									alt='Shahen Logo'
+									className='h-10 w-auto'
+								/>
+							)}
+						</a>
 					</div>
 				</div>
 
