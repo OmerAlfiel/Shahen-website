@@ -19,14 +19,29 @@ export default function AnimatedSection({
 		triggerOnce: true,
 	});
 
+	const getInitialTransform = (animationType: string) => {
+		switch (animationType) {
+			case "slide-in-left":
+				return "translate-x-[-30px]";
+			case "slide-in-right":
+				return "translate-x-[30px]";
+			case "slide-up":
+				return "translate-y-[30px]";
+			default:
+				return "translate-y-[20px]";
+		}
+	};
+
 	return (
 		<div
 			ref={targetRef}
-			className={`${className} ${
-				hasIntersected ? `animate-${animation}` : "opacity-0"
+			className={`${className} transition-all duration-700 ease-out ${
+				hasIntersected
+					? "opacity-100 translate-x-0 translate-y-0"
+					: `opacity-0 ${getInitialTransform(animation)}`
 			}`}
 			style={{
-				animationDelay: `${delay}ms`,
+				transitionDelay: delay > 0 ? `${delay}ms` : "0ms",
 			}}>
 			{children}
 		</div>
