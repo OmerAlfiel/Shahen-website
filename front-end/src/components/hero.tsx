@@ -71,11 +71,14 @@ export default function Hero() {
 					</div>
 
 					{/* Location inputs */}
-					<div className='flex flex-col lg:flex-row gap-3 md:gap-4 items-center'>
+					<div className='flex flex-col lg:flex-row gap-3 md:gap-4 items-stretch'>
 						{language === "ar" ? (
 							<>
 								{/* Pickup Location - first in RTL */}
-								<div className='flex-1 w-full'>
+								<div
+									className={`${
+										deliveryType === "multiple" ? "lg:flex-[2]" : "flex-1"
+									} w-full min-w-0`}>
 									<MapboxInput
 										placeholder='موقع التحميل'
 										value={pickupLocation}
@@ -84,12 +87,15 @@ export default function Hero() {
 								</div>
 
 								{/* Arrow */}
-								<div className='hidden lg:block text-3xl text-[#3BA776] font-bold px-2'>
+								<div className='hidden lg:flex items-center justify-center text-2xl text-[#3BA776] font-bold px-1 flex-shrink-0'>
 									←
 								</div>
 
 								{/* Delivery Location 1 */}
-								<div className='flex-1 w-full'>
+								<div
+									className={`${
+										deliveryType === "multiple" ? "lg:flex-[2]" : "flex-1"
+									} w-full min-w-0`}>
 									<div style={{ textAlign: "start" }}>
 										<MapboxInput
 											placeholder='عنوان التسليم 1'
@@ -102,10 +108,10 @@ export default function Hero() {
 								{/* Second Delivery Location - conditional */}
 								{deliveryType === "multiple" && (
 									<>
-										<div className='hidden lg:block text-3xl text-[#3BA776] font-bold px-2'>
+										<div className='hidden lg:flex items-center justify-center text-2xl text-[#3BA776] font-bold px-1 flex-shrink-0'>
 											←
 										</div>
-										<div className='flex-1 w-full'>
+										<div className='lg:flex-[2] w-full min-w-0'>
 											<MapboxInput
 												placeholder='عنوان التسليم 2'
 												value={deliveryLocation2}
@@ -118,7 +124,10 @@ export default function Hero() {
 						) : (
 							<>
 								{/* Pickup Location - first in LTR */}
-								<div className='flex-1 w-full'>
+								<div
+									className={`${
+										deliveryType === "multiple" ? "lg:flex-[2]" : "flex-1"
+									} w-full min-w-0`}>
 									<MapboxInput
 										placeholder='Pickup Location'
 										value={pickupLocation}
@@ -127,12 +136,15 @@ export default function Hero() {
 								</div>
 
 								{/* Arrow */}
-								<div className='hidden lg:block text-3xl text-[#3BA776] font-bold px-2'>
+								<div className='hidden lg:flex items-center justify-center text-2xl text-[#3BA776] font-bold px-1 flex-shrink-0'>
 									→
 								</div>
 
 								{/* Delivery Location 1 */}
-								<div className='flex-1 w-full'>
+								<div
+									className={`${
+										deliveryType === "multiple" ? "lg:flex-[2]" : "flex-1"
+									} w-full min-w-0`}>
 									<MapboxInput
 										placeholder='Delivery Address 1'
 										value={deliveryLocation1}
@@ -143,10 +155,10 @@ export default function Hero() {
 								{/* Second Delivery Location - conditional */}
 								{deliveryType === "multiple" && (
 									<>
-										<div className='hidden lg:block text-3xl text-[#3BA776] font-bold px-2'>
+										<div className='hidden lg:flex items-center justify-center text-2xl text-[#3BA776] font-bold px-1 flex-shrink-0'>
 											→
 										</div>
-										<div className='flex-1 w-full'>
+										<div className='lg:flex-[2] w-full min-w-0'>
 											<MapboxInput
 												placeholder='Delivery Address 2'
 												value={deliveryLocation2}
