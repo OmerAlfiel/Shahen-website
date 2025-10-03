@@ -48,6 +48,7 @@ const startServer = async () => {
 	try {
 		// Initialize database connection
 		await initializeDatabase();
+		console.log(`📊 Database: PostgreSQL connected`);
 
 		// Start server
 		app.listen(PORT, () => {
@@ -61,24 +62,29 @@ const startServer = async () => {
 				}`
 			);
 		});
-
-		// Try to initialize database connection (non-blocking)
-		try {
-			await initializeDatabase();
-			console.log(`📊 Database: PostgreSQL connected`);
-		} catch (dbError) {
-			console.warn(
-				`⚠️  Database connection failed: ${
-					dbError instanceof Error ? dbError.message : String(dbError)
-				}`
-			);
-			console.warn(
-				`📝 Server running without database. Please configure PostgreSQL to enable contact form.`
-			);
-		}
 	} catch (error) {
 		console.error("❌ Failed to start server:", error);
-		process.exit(1);
+		console.error(
+			`⚠️  Database connection failed: ${
+				error instanceof Error ? error.message : String(error)
+			}`
+		);
+		console.warn(
+			`📝 Server running without database. Please configure PostgreSQL to enable contact form.`
+		);
+
+		// Start server anyway without database
+		app.listen(PORT, () => {
+			console.log(`🚀 Server is running on port ${PORT} (without database)`);
+			console.log(
+				`🌐 API Documentation available at http://localhost:${PORT}/api/health`
+			);
+			console.log(
+				`🔗 Frontend URL: ${
+					process.env.FRONTEND_URL || "http://localhost:3000"
+				}`
+			);
+		});
 	}
 };
 
