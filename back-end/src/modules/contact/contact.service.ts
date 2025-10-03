@@ -1,52 +1,69 @@
+import { validate } from "class-validator";
 import { ContactFormData, ContactResponse } from "../../types";
-
-export interface ContactSubmission extends ContactFormData {
-	id: string;
-	submittedAt: Date;
-	status: "pending" | "processed" | "replied";
-}
+import { ContactRepository } from "../../repositories/ContactRepository";
+import { Contact, ContactStatus } from "../../entities/Contact";
 
 export class ContactService {
-	private submissions: ContactSubmission[] = [];
+	private contactRepository: ContactRepository;
 
-	async processContactForm(data: ContactFormData): Promise<ContactResponse> {
+	constructor() {
+		this.contactRepository = new ContactRepository();
+	}
+
+	async processContactForm(
+		data: ContactFormData,
+		ipAddress?: string,
+		userAgent?: string
+	): Promise<ContactResponse> {
 		try {
-			// Generate a unique ID for the submission
-			const id = this.generateId();
+			// Create contact entity for validation
+			const contact = new Contact();
+			contact.name = data.name;
+			contact.phone = data.phone;
+			contact.subject = data.subject;
+			contact.message = data.message;
+			contact.status = ContactStatus.PENDING;
+			contact.ipAddress = ipAddress;
+			contact.userAgent = userAgent;
 
-			// Create a new submission
-			const submission: ContactSubmission = {
-				...data,
-				id,
-				submittedAt: new Date(),
-				status: "pending",
-			};
+			// Validate the contact data
+			const errors = await validate(contact);
+			if (errors.length > 0) {
+				const errorMessages = errors
+					.map((error) => Object.values(error.constraints || {}))
+					.flat();
+				return {
+					success: false,
+					message: errorMessages.join(", "),
+				};
+			}
 
-			// Store the submission (in production, this would be saved to a database)
-			this.submissions.push(submission);
+			// Save to database
+			const savedContact = await this.contactRepository.create(contact);
 
 			// Log the submission for development
-			console.log("New contact form submission:", {
-				id: submission.id,
-				name: submission.name,
-				subject: submission.subject || "No subject",
-				submittedAt: submission.submittedAt,
+			console.log("✉️ New contact form submission:", {
+				id: savedContact.id,
+				name: savedContact.name,
+				phone: savedContact.phone,
+				subject: savedContact.subject || "No subject",
+				submittedAt: savedContact.createdAt,
 			});
 
 			// In a real application, you might:
-			// 1. Save to database
-			// 2. Send email notification
-			// 3. Add to CRM system
-			// 4. Send auto-reply email
+			// 1. Send email notification to admin
+			// 2. Add to CRM system
+			// 3. Send auto-reply email to customer
+			// 4. Create a ticket in support system
 
 			return {
 				success: true,
 				message:
 					"Your message has been received successfully. We will get back to you soon!",
-				id,
+				id: savedContact.id,
 			};
 		} catch (error) {
-			console.error("Error processing contact form:", error);
+			console.error("❌ Error processing contact form:", error);
 			return {
 				success: false,
 				message:
@@ -55,32 +72,52 @@ export class ContactService {
 		}
 	}
 
-	async getAllSubmissions(): Promise<ContactSubmission[]> {
-		// In production, this would query the database
-		return this.submissions.sort(
-			(a, b) => b.submittedAt.getTime() - a.submittedAt.getTime()
-		);
+	async getAllSubmissions(options?: {
+		status?: ContactStatus;
+		limit?: number;
+		offset?: number;
+		sortBy?: keyof Contact;
+		sortOrder?: "ASC" | "DESC";
+	}): Promise<{ contacts: Contact[]; total: number }> {
+		return await this.contactRepository.findAll(options);
 	}
 
-	async getSubmissionById(id: string): Promise<ContactSubmission | null> {
-		// In production, this would query the database
-		return this.submissions.find((submission) => submission.id === id) || null;
+	async getSubmissionById(id: string): Promise<Contact | null> {
+		return await this.contactRepository.findById(id);
+	}
+
+	async getSubmissionsByEmail(email: string): Promise<Contact[]> {
+		// Email functionality removed - return empty array
+		return [];
 	}
 
 	async updateSubmissionStatus(
 		id: string,
-		status: ContactSubmission["status"]
-	): Promise<boolean> {
-		const submission = this.submissions.find((sub) => sub.id === id);
-		if (submission) {
-			submission.status = status;
-			return true;
-		}
-		return false;
+		status: ContactStatus,
+		adminNotes?: string
+	): Promise<Contact | null> {
+		return await this.contactRepository.updateStatus(id, status, adminNotes);
 	}
 
-	private generateId(): string {
-		return Date.now().toString(36) + Math.random().toString(36).substr(2);
+	async deleteSubmission(id: string): Promise<boolean> {
+		return await this.contactRepository.delete(id);
+	}
+
+	async getContactStats(): Promise<{
+		total: number;
+		pending: number;
+		processed: number;
+		replied: number;
+		todayCount: number;
+	}> {
+		return await this.contactRepository.getStats();
+	}
+
+	async searchContacts(
+		searchTerm: string,
+		options?: { limit?: number; offset?: number }
+	): Promise<{ contacts: Contact[]; total: number }> {
+		return await this.contactRepository.searchContacts(searchTerm, options);
 	}
 }
 
