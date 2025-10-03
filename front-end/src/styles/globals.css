@@ -365,4 +365,14 @@
 		opacity: 1;
 		transform: translateY(0);
 	}
+
+	/* Scrollbar hiding utilities */
+	.scrollbar-hide {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
 }
