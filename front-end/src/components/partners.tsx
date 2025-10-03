@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useLanguage } from "../contexts/language-context";
 import AnimatedSection from "./animated-section";

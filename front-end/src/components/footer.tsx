@@ -1,5 +1,3 @@
-"use client";
-
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import React from "react";
 import { useLanguage } from "../contexts/language-context";

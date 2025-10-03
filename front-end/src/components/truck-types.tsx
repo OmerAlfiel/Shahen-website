@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useLanguage } from "../contexts/language-context";
 import AnimatedSection from "./animated-section";

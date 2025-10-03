@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
 			className='min-h-screen relative bg-transparent'
 			dir={language === "ar" ? "rtl" : "ltr"}>
 			<Hero />
-			<div className='bg-white/95 backdrop-blur-sm relative z-10 shadow-lg'>
+			<div className='relative z-10'>
 				<ServiceTypes />
 				<OrderProcess />
 				<TruckTypes />

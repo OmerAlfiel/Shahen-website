@@ -1,5 +1,3 @@
-"use client";
-
 import { Package, Headphones, MapPin } from "lucide-react";
 import { useLanguage } from "../contexts/language-context";
 import AnimatedSection from "./animated-section";
