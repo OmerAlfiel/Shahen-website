@@ -29,10 +29,6 @@ export class Contact {
 	@IsOptional()
 	phone?: string;
 
-	@Column({ type: "varchar", length: 200, nullable: true })
-	@IsOptional()
-	subject?: string;
-
 	@Column({ type: "text" })
 	@IsNotEmpty({ message: "Message is required" })
 	message: string;

@@ -5,8 +5,12 @@ import {
 } from "../types";
 
 export const validatePhone = (phone: string): boolean => {
-	const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-	return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ""));
+	// Normalize: remove spaces, dashes, parentheses
+	const normalized = phone.replace(/[\s\-\(\)]/g, "");
+	// Accept E.164 like +9665xxxxxxx OR local formats starting with 0 and 9-15 digits
+	const e164 = /^\+[1-9]\d{7,14}$/; // + followed by 8-15 digits total length 9-16 incl +
+	const local = /^0?\d{9,15}$/; // optional leading 0 then 9-15 digits
+	return e164.test(normalized) || local.test(normalized);
 };
 
 export const validateContactForm = (
@@ -52,13 +56,7 @@ export const validateContactForm = (
 		});
 	}
 
-	// Subject validation (optional but if provided, must be reasonable length)
-	if (data.subject && data.subject.length > 200) {
-		errors.push({
-			field: "subject",
-			message: "Subject must be less than 200 characters",
-		});
-	}
+	// Subject field removed
 
 	// Company validation (optional)
 	if (data.company && data.company.length > 100) {

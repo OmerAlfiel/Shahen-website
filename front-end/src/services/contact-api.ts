@@ -8,7 +8,6 @@ export interface ContactFormData {
 	phone: string;
 	company?: string;
 	message: string;
-	subject?: string;
 }
 
 // Contact API response interface
@@ -51,25 +50,31 @@ export class ContactApi {
 			});
 
 			if (!response.ok) {
-				const errorData = await response.json().catch(() => ({}));
-				throw new Error(
-					errorData.message || `HTTP error! status: ${response.status}`
-				);
+				// Try to parse structured backend error { status: 'error', message, error? }
+				let message = `HTTP error! status: ${response.status}`;
+				try {
+					const errorData = await response.json();
+					message = errorData?.message || message;
+					// If backend sent serialized validation errors in error field, append a hint
+					if (errorData?.error) {
+						message += `: ${errorData.error}`;
+					}
+				} catch {
+					// ignore json parse errors
+				}
+				throw new ApiError({ message, status: response.status });
 			}
 
 			const result = await response.json();
 			return result;
 		} catch (error) {
 			console.error("Contact form submission error:", error);
+			if (error instanceof ApiError) throw error;
 			throw new ApiError({
 				message:
 					error instanceof Error
 						? error.message
 						: "Failed to submit contact form",
-				status:
-					error instanceof Error && "status" in error
-						? (error as any).status
-						: undefined,
 			});
 		}
 	}

@@ -20,7 +20,6 @@ export class ContactService {
 			const contact = new Contact();
 			contact.name = data.name;
 			contact.phone = data.phone;
-			contact.subject = data.subject;
 			contact.message = data.message;
 			contact.status = ContactStatus.PENDING;
 			contact.ipAddress = ipAddress;
@@ -46,7 +45,6 @@ export class ContactService {
 				id: savedContact.id,
 				name: savedContact.name,
 				phone: savedContact.phone,
-				subject: savedContact.subject || "No subject",
 				submittedAt: savedContact.createdAt,
 			});
 

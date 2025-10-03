@@ -1,5 +1,8 @@
 import { DataSource } from "typeorm";
+import dotenv from "dotenv";
 import { Contact } from "../entities/Contact";
+
+dotenv.config();
 
 export const AppDataSource = new DataSource({
 	type: "postgres",

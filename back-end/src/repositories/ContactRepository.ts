@@ -115,7 +115,7 @@ export class ContactRepository {
 		const queryBuilder = this.repository.createQueryBuilder("contact");
 
 		queryBuilder.where(
-			"contact.name ILIKE :searchTerm OR contact.subject ILIKE :searchTerm OR contact.message ILIKE :searchTerm",
+			"contact.name ILIKE :searchTerm OR contact.message ILIKE :searchTerm",
 			{ searchTerm: `%${searchTerm}%` }
 		);
 

@@ -13,7 +13,6 @@ export class InitialMigration1696348800000 implements MigrationInterface {
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "name" character varying(100) NOT NULL,
                 "phone" character varying(20),
-                "subject" character varying(200),
                 "message" text NOT NULL,
                 "status" character varying NOT NULL DEFAULT 'pending',
                 "ipAddress" character varying(45),

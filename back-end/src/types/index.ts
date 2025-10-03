@@ -3,7 +3,6 @@ export interface ContactFormData {
 	phone?: string;
 	company?: string;
 	message: string;
-	subject?: string;
 }
 
 export interface ContactResponse {

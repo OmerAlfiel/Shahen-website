@@ -12,6 +12,9 @@ const ContactPage: React.FC = () => {
 	const { submitForm, loading, error, isSuccess, successMessage } =
 		useContact();
 
+	// Local error for client-side validation issues
+	const [clientError, setClientError] = useState<string | null>(null);
+
 	const [formData, setFormData] = useState<ContactFormData>({
 		name: "",
 		phone: "",
@@ -22,19 +25,44 @@ const ContactPage: React.FC = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
+		// Clear previous client-side error
+		setClientError(null);
+
+		// Minimal client-side validation to reduce 400s
+		if (!formData.name || formData.name.trim().length < 2) {
+			setClientError(
+				language === "ar"
+					? "يجب أن يكون الاسم على الأقل حرفين"
+					: "Name must be at least 2 characters"
+			);
+			return;
+		}
+		if (!formData.message || formData.message.trim().length < 10) {
+			setClientError(
+				language === "ar"
+					? "يجب أن تكون الرسالة 10 أحرف على الأقل"
+					: "Message must be at least 10 characters"
+			);
+			return;
+		}
+
 		try {
 			await submitForm(formData);
 
-			// Success is handled by the hook, just reset form
+			// Success is handled by the hook; also reset form and clear client error
 			setFormData({
 				name: "",
 				phone: "",
 				company: "",
 				message: "",
 			});
-		} catch (error) {
-			// Error is handled by the hook, no need to show additional alert
-			console.error("Contact form submission failed:", error);
+			setClientError(null);
+		} catch (err) {
+			// Network/backend error will be exposed via `error` from the hook
+			// Optionally reflect here too for immediate feedback
+			if (err instanceof Error) {
+				setClientError(err.message);
+			}
 		}
 	};
 
@@ -45,6 +73,7 @@ const ContactPage: React.FC = () => {
 			...formData,
 			[e.target.name]: e.target.value,
 		});
+		if (clientError) setClientError(null);
 	};
 
 	return (
@@ -133,10 +162,13 @@ const ContactPage: React.FC = () => {
 										</div>
 									)}
 
-									{/* Error Message */}
-									{error && (
-										<div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center'>
-											{error.message}
+									{/* Error Message (client-side or backend) */}
+									{(clientError || error) && (
+										<div
+											className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center whitespace-pre-wrap'
+											role='alert'
+											aria-live='polite'>
+											{clientError || error?.message}
 										</div>
 									)}
 
