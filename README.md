@@ -100,31 +100,6 @@ npm start
 
 The frontend will run on `http://localhost:3000` and automatically open in your browser.
 
-## Project Structure
-
-```
-Shahen-website-main/
-├── back-end/                 # Node.js/Express API server
-│   ├── src/
-│   │   ├── config/          # Database configuration
-│   │   ├── entities/        # TypeORM entities
-│   │   ├── modules/         # API modules (contact, quote)
-│   │   ├── middleware/      # Express middlewares
-│   │   └── utils/           # Utility functions
-│   ├── .env.example         # Environment variables template
-│   └── package.json
-├── front-end/               # React TypeScript application
-│   ├── src/
-│   │   ├── components/      # Reusable UI components
-│   │   ├── pages/           # Page components
-│   │   ├── services/        # API service functions
-│   │   ├── hooks/           # Custom React hooks
-│   │   └── styles/          # CSS styles
-│   ├── public/              # Static assets
-│   └── package.json
-└── README.md               # This file
-```
-
 ## Available Scripts
 
 ### Backend (`/back-end`)
