@@ -182,7 +182,7 @@ const translations = {
 		viewDetails: "عرض التفاصيل",
 
 		// Contact Page Translations
-		contactHeroTitle: "لنعمل معا يدا ليد على شراكة متميزة",
+		contactHeroTitle: "لنعمل معا يدا بيد على شراكة متميزة",
 		contactHeroSubtitle:
 			"هل تريد الانضمام لنا ؟ حمل تطبيق شحن من متجر التطبيقات على هاتفك الذكي",
 		contactHeroDescription: "نسعد بزيارتك لنا للحصول على استشارة في مكتب شحن",
@@ -196,7 +196,6 @@ const translations = {
 		contactAddressLabel: "العنوان",
 		contactAddressValue: "المهندس مساعد العنقري، السليمانية، الرياض 12245",
 		contactPhoneLabel: "رقم الهاتف",
-		contactEmailLabel: "البريد الإلكتروني",
 		contactSocialLabel: "مواقع التواصل الاجتماعي",
 		contactWhatsApp: "واتس اب",
 		contactChatHelp: "هل تحتاج إلى مساعدة ؟",
@@ -386,7 +385,6 @@ const translations = {
 		contactAddressValue:
 			"Al Muhandis Masaid Al Angari, As Sulimaniyah, Riyadh 12245",
 		contactPhoneLabel: "Phone Number",
-		contactEmailLabel: "Email",
 		contactSocialLabel: "Social Media",
 		contactWhatsApp: "WhatsApp",
 		contactChatHelp: "Need help?",

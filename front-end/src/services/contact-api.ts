@@ -5,7 +5,6 @@ const API_BASE_URL =
 // Contact form data interface
 export interface ContactFormData {
 	name: string;
-	email?: string;
 	phone: string;
 	company?: string;
 	message: string;

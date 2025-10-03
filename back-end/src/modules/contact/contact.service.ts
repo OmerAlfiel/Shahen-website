@@ -29,7 +29,6 @@ export class ContactService {
 			console.log("New contact form submission:", {
 				id: submission.id,
 				name: submission.name,
-				email: submission.email,
 				subject: submission.subject || "No subject",
 				submittedAt: submission.submittedAt,
 			});
