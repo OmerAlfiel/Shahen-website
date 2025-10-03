@@ -2,7 +2,7 @@
 
 A full-stack logistics platform built with React (TypeScript) frontend and Node.js/Express backend with PostgreSQL database.
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before you begin, make sure you have the following installed on your system:
 
@@ -100,7 +100,7 @@ npm start
 
 The frontend will run on `http://localhost:3000` and automatically open in your browser.
 
-## 🎯 Project Structure
+## Project Structure
 
 ```
 Shahen-website-main/
@@ -125,7 +125,7 @@ Shahen-website-main/
 └── README.md               # This file
 ```
 
-## 🔧 Available Scripts
+## Available Scripts
 
 ### Backend (`/back-end`)
 
@@ -141,7 +141,7 @@ Shahen-website-main/
 - `npm test` - Run tests
 - `npm run eject` - Eject from Create React App
 
-## 🌐 API Endpoints
+## API Endpoints
 
 The backend provides the following main endpoints:
 
@@ -163,7 +163,7 @@ The backend provides the following main endpoints:
 - **Database**: PostgreSQL with automatic migrations
 - **Maps Integration**: Mapbox for location services
 
-## 🔒 Environment Variables
+## Environment Variables
 
 ### Backend (.env)
 
@@ -185,7 +185,7 @@ REACT_APP_API_BASE_URL=http://localhost:3001/api
 REACT_APP_MAPBOX_TOKEN=your_mapbox_token
 ```
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -219,25 +219,3 @@ If you need to change the default ports:
 2. **Database Changes**: The backend automatically syncs database schema in development mode
 3. **API Testing**: Use tools like Postman or curl to test API endpoints
 4. **Browser DevTools**: React DevTools extension is helpful for debugging
-
-## 🚀 Production Deployment
-
-For production deployment:
-
-1. **Backend**:
-
-   ```bash
-   cd back-end
-   npm run build
-   npm start
-   ```
-
-2. **Frontend**:
-
-   ```bash
-   cd front-end
-   npm run build
-   # Serve the build folder with a web server
-   ```
-
-3. **Environment**: Update environment variables for production URLs and database credentials
