@@ -71,7 +71,7 @@ export default function ServiceTypes() {
 					<div className='flex flex-nowrap gap-1 md:gap-6 max-w-6xl mx-auto overflow-x-auto'>
 						{items.map((item, idx) => (
 							<AnimatedSection key={idx} animation='slide-up' delay={idx * 150}>
-								<article className='w-[32vw] md:w-auto md:flex-1 h-[350px] md:h-[700px] bg-white shadow-lg overflow-hidden flex flex-col flex-shrink-0'>
+								<article className='w-[32vw] md:w-auto md:flex-1 h-[350px] md:h-[500px] bg-white shadow-lg overflow-hidden flex flex-col flex-shrink-0'>
 									<div className='w-full overflow-hidden flex justify-center items-center py-1 md:py-6 flex-shrink-0'>
 										<img
 											src={item.img}

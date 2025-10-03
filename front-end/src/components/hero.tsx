@@ -89,7 +89,7 @@ export default function Hero() {
 	return (
 		<div className='relative min-h-[100vh] overflow-hidden pt-16 md:pt-20'>
 			{/* Hero Content */}
-			<div className='relative z-10 container mx-auto px-4 pt-6 pb-24'>
+			<div className='relative min-h-[100vh] overflow-hidden pt-16 md:pt-20 mb-2'>
 				{/* Main heading */}
 				<h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-8 md:mb-10 leading-relaxed max-w-5xl mx-auto mt-4'>
 					{language === "ar"
@@ -97,7 +97,6 @@ export default function Hero() {
 						: "Transport your goods and cargo wherever you want in an easy and safe way."}
 				</h1>
 
-				{/* Order form card (step-by-step flow) */}
 				<div className='max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8'>
 					{/* Header tabs */}
 					<div className='flex items-center justify-between border-b border-gray-100 pb-3 md:pb-4'>

@@ -1,13 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useLanguage } from "../contexts/language-context";
 import { Button } from "./ui/button";
 
 const Header: React.FC = () => {
 	const { language, setLanguage, t } = useLanguage();
+	const location = useLocation();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [activeLink, setActiveLink] = useState("index");
 	const [isVisible, setIsVisible] = useState(true);
 	const [lastScrollY, setLastScrollY] = useState(0);
+
+	// Function to determine if a nav link is active
+	const getActiveLink = () => {
+		const currentPath = location.pathname;
+		const currentHash = location.hash;
+
+		// Handle specific routes
+		if (currentPath === "/contact") return "contactus";
+		if (currentPath === "/login") return "login";
+		if (currentPath === "/dashboard") return "dashboard";
+		if (currentPath === "/tracking") return "tracking";
+
+		// Handle home page sections with hash
+		if (currentPath === "/" || currentPath === "") {
+			if (currentHash === "#about") return "about";
+			if (currentHash === "#partners") return "partners";
+			if (currentHash === "#business") return "business";
+			return "index"; // Default to home
+		}
+
+		return "index"; // Default fallback
+	};
+
+	const activeLink = getActiveLink();
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -30,6 +55,11 @@ const Header: React.FC = () => {
 			window.removeEventListener("scroll", handleScroll);
 		};
 	}, [lastScrollY]);
+
+	// Force re-render when location changes (including hash changes)
+	useEffect(() => {
+		// This effect will trigger when location changes
+	}, [location.pathname, location.hash]);
 
 	const navLinks = [
 		{ id: "contactus", label: t("contact"), href: "/contact" },
@@ -134,7 +164,6 @@ const Header: React.FC = () => {
 								<li key={link.id}>
 									<a
 										href={link.href}
-										onClick={() => setActiveLink(link.id)}
 										className={`text-base font-medium transition-colors hover:text-emerald-600 ${
 											activeLink === link.id
 												? "text-emerald-600"
@@ -148,10 +177,7 @@ const Header: React.FC = () => {
 					</div>
 					{/* Logo Section */}
 					<div className='flex-shrink-0'>
-						<a
-							href='/'
-							className='flex items-center cursor-pointer'
-							onClick={() => setActiveLink("index")}>
+						<a href='/' className='flex items-center cursor-pointer'>
 							{language === "ar" ? (
 								<img
 									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahenLogoUrdu-XV3pQbfUgCssBVI00Jfa7org5FbYHk.svg'
@@ -183,7 +209,6 @@ const Header: React.FC = () => {
 								<a
 									href={link.href}
 									onClick={() => {
-										setActiveLink(link.id);
 										setMobileMenuOpen(false);
 									}}
 									className={`block px-4 py-2 text-base font-medium transition-colors rounded-lg ${
