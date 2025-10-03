@@ -4,39 +4,40 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { useContact } from "../hooks/use-contact";
+import { ContactFormData } from "../services/contact-api";
 
 const ContactPage: React.FC = () => {
 	const { language, t } = useLanguage();
-	const [formData, setFormData] = useState({
+	const { submitForm, loading, error, isSuccess, successMessage } =
+		useContact();
+
+	const [formData, setFormData] = useState<ContactFormData>({
 		name: "",
 		phone: "",
 		company: "",
 		message: "",
+		email: "",
 	});
-	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setIsSubmitting(true);
 
-		// Mock API call
-		await new Promise((resolve) => setTimeout(resolve, 1500));
+		try {
+			await submitForm(formData);
 
-		console.log("[v0] Contact form submitted:", formData);
-		alert(
-			language === "ar"
-				? "تم إرسال رسالتك بنجاح!"
-				: "Your message has been sent successfully!"
-		);
-
-		// Reset form
-		setFormData({
-			name: "",
-			phone: "",
-			company: "",
-			message: "",
-		});
-		setIsSubmitting(false);
+			// Success is handled by the hook, just reset form
+			setFormData({
+				name: "",
+				phone: "",
+				company: "",
+				message: "",
+				email: "",
+			});
+		} catch (error) {
+			// Error is handled by the hook, no need to show additional alert
+			console.error("Contact form submission failed:", error);
+		}
 	};
 
 	const handleChange = (
@@ -148,6 +149,20 @@ const ContactPage: React.FC = () => {
 							</h2>
 
 							<form onSubmit={handleSubmit} className='space-y-6'>
+								{/* Success Message */}
+								{isSuccess && successMessage && (
+									<div className='bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm'>
+										{successMessage}
+									</div>
+								)}
+
+								{/* Error Message */}
+								{error && (
+									<div className='bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm'>
+										{error.message}
+									</div>
+								)}
+
 								<div>
 									<label
 										htmlFor='name'
@@ -178,6 +193,23 @@ const ContactPage: React.FC = () => {
 										type='tel'
 										required
 										value={formData.phone}
+										onChange={handleChange}
+										className='w-full text-right'
+										dir='rtl'
+									/>
+								</div>
+
+								<div>
+									<label
+										htmlFor='email'
+										className='block text-sm font-medium text-gray-700 mb-2 text-right'>
+										{t("contactEmail") || "البريد الإلكتروني"}
+									</label>
+									<Input
+										id='email'
+										name='email'
+										type='email'
+										value={formData.email}
 										onChange={handleChange}
 										className='w-full text-right'
 										dir='rtl'
@@ -220,9 +252,9 @@ const ContactPage: React.FC = () => {
 
 								<Button
 									type='submit'
-									disabled={isSubmitting}
+									disabled={loading}
 									className='w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-lg font-medium text-lg'>
-									{isSubmitting ? t("sending") : t("contactSubmit")}
+									{loading ? t("sending") : t("contactSubmit")}
 								</Button>
 							</form>
 						</div>
