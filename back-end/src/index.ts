@@ -3,16 +3,14 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import contactRoutes from "./modules/contact/contact.routes";
+import quoteRoutes from "./modules/quote/quote.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { logger } from "./middleware/logger";
 import { initializeDatabase } from "./config/database";
 
-// Load environment variables
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 3001;
-
 // Middleware
 app.use(
 	cors({
@@ -39,8 +37,8 @@ app.get("/api/health", (_req, res) => {
 
 // API Routes
 app.use("/api/contact", contactRoutes);
+app.use("/api/quote", quoteRoutes);
 
-// Error handling middleware (must be last)
 app.use(errorHandler);
 
 // Initialize database and start server
