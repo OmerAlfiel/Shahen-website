@@ -67,22 +67,6 @@ const startServer = async () => {
 				error instanceof Error ? error.message : String(error)
 			}`
 		);
-		console.warn(
-			`📝 Server running without database. Please configure PostgreSQL to enable contact form.`
-		);
-
-		// Start server anyway without database
-		app.listen(PORT, () => {
-			console.log(`🚀 Server is running on port ${PORT} (without database)`);
-			console.log(
-				`🌐 API Documentation available at http://localhost:${PORT}/api/health`
-			);
-			console.log(
-				`🔗 Frontend URL: ${
-					process.env.FRONTEND_URL || "http://localhost:3000"
-				}`
-			);
-		});
 	}
 };
 

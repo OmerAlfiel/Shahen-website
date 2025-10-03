@@ -19,10 +19,9 @@ export default function OrderProcess() {
 			<div className='container mx-auto px-2'>
 				<AnimatedSection animation='slide-in-left'>
 					<div className='max-w-4xl mx-auto flex justify-center'>
-						{/* When Arabic, render video first so it lands on the right (inline-start) */}
 						{isArabic ? (
 							<div className='flex flex-col md:flex-row items-center bg-white rounded-3xl p-8 shadow-lg gap-8'>
-								{/* Video first */}
+								{/* Video  */}
 								<div className='w-full md:w-[150px] lg:w-[250px]'>
 									<video
 										className='w-full h-auto rounded-2xl shadow-xl border border-gray-200'
@@ -42,7 +41,7 @@ export default function OrderProcess() {
 									</video>
 								</div>
 
-								{/* Text second */}
+								{/* Text  */}
 								<div dir='rtl' className='text-start flex-1'>
 									<h2 className='text-3xl md:text-4xl font-bold text-[#1f2937] mb-6'>
 										{t("howToOrder")}

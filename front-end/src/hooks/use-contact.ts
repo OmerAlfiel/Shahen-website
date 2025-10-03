@@ -25,7 +25,6 @@ interface UseContactReturn extends UseContactState {
 
 /**
  * Contact feature hook - handles contact form submission with state management
- * Each feature should have its own dedicated hook following this pattern
  */
 export function useContact(): UseContactReturn {
 	const [state, setState] = useState<UseContactState>({

@@ -10,12 +10,10 @@ interface MapboxInputProps {
 
 // Placeholder functions for Mapbox API integration
 const getMapboxToken = async (): Promise<string> => {
-	// In a real implementation, this would fetch the token from your API or environment
 	return process.env.REACT_APP_MAPBOX_TOKEN || "";
 };
 
 const searchLocation = async (query: string): Promise<any[]> => {
-	// In a real implementation, this would use Mapbox Geocoding API
 	if (!query || query.length < 3) return [];
 
 	try {
@@ -171,7 +169,7 @@ export default function MapboxInput({
 						handleSearch(e.target.value);
 					}}
 					placeholder={placeholder}
-					title={searchQuery} // Shows full text on hover
+					title={searchQuery}
 					className={`w-full h-14 bg-[#F5F5F5] border border-gray-200 rounded-lg ${
 						language === "ar" ? "text-right pr-16 pl-3" : "text-left pl-16 pr-3"
 					} focus:outline-none focus:ring-2 focus:ring-[#3BA776] text-gray-700 placeholder-gray-500 truncate`}

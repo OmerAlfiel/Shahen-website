@@ -6,7 +6,7 @@ type LoadType = {
 	id: number;
 	nameAr: string;
 	nameEn: string;
-	askDetails?: boolean; // whether to ask for quantity/exact type
+	askDetails?: boolean;
 };
 
 export interface LoadTypePickerValue {

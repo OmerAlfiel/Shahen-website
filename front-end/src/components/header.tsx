@@ -10,7 +10,6 @@ const Header: React.FC = () => {
 	const [isVisible, setIsVisible] = useState(true);
 	const [lastScrollY, setLastScrollY] = useState(0);
 
-	// Function to determine if a nav link is active
 	const getActiveLink = () => {
 		const currentPath = location.pathname;
 		const currentHash = location.hash;
@@ -26,10 +25,10 @@ const Header: React.FC = () => {
 			if (currentHash === "#about") return "about";
 			if (currentHash === "#partners") return "partners";
 			if (currentHash === "#business") return "business";
-			return "index"; // Default to home
+			return "index";
 		}
 
-		return "index"; // Default fallback
+		return "index";
 	};
 
 	const activeLink = getActiveLink();
@@ -39,10 +38,8 @@ const Header: React.FC = () => {
 			const currentScrollY = window.scrollY;
 
 			if (currentScrollY > lastScrollY && currentScrollY > 100) {
-				// Scrolling down & past 100px
 				setIsVisible(false);
 			} else {
-				// Scrolling up
 				setIsVisible(true);
 			}
 
@@ -56,7 +53,6 @@ const Header: React.FC = () => {
 		};
 	}, [lastScrollY]);
 
-	// Force re-render when location changes (including hash changes)
 	useEffect(() => {
 		// This effect will trigger when location changes
 	}, [location.pathname, location.hash]);

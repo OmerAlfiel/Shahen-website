@@ -33,7 +33,6 @@ export const validateContactForm = (
 		});
 	}
 
-	// Phone validation (optional but if provided, must be valid)
 	if (data.phone && !validatePhone(data.phone)) {
 		errors.push({
 			field: "phone",
@@ -55,8 +54,6 @@ export const validateContactForm = (
 			message: "Message must be less than 2000 characters",
 		});
 	}
-
-	// Subject field removed
 
 	// Company validation (optional)
 	if (data.company && data.company.length > 100) {

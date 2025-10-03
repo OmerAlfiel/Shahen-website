@@ -48,12 +48,6 @@ export class ContactService {
 				submittedAt: savedContact.createdAt,
 			});
 
-			// In a real application, you might:
-			// 1. Send email notification to admin
-			// 2. Add to CRM system
-			// 3. Send auto-reply email to customer
-			// 4. Create a ticket in support system
-
 			return {
 				success: true,
 				message:
@@ -82,11 +76,6 @@ export class ContactService {
 
 	async getSubmissionById(id: string): Promise<Contact | null> {
 		return await this.contactRepository.findById(id);
-	}
-
-	async getSubmissionsByEmail(email: string): Promise<Contact[]> {
-		// Email functionality removed - return empty array
-		return [];
 	}
 
 	async updateSubmissionStatus(

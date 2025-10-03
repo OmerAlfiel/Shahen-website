@@ -50,7 +50,6 @@ export class ContactApi {
 			});
 
 			if (!response.ok) {
-				// Try to parse structured backend error { status: 'error', message, error? }
 				let message = `HTTP error! status: ${response.status}`;
 				try {
 					const errorData = await response.json();
@@ -59,9 +58,7 @@ export class ContactApi {
 					if (errorData?.error) {
 						message += `: ${errorData.error}`;
 					}
-				} catch {
-					// ignore json parse errors
-				}
+				} catch {}
 				throw new ApiError({ message, status: response.status });
 			}
 

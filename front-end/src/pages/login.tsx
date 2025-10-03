@@ -86,7 +86,7 @@ const LoginPage: React.FC = () => {
 
 		try {
 			// Mock API call - simulate profile completion
-			await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
+			await new Promise((resolve) => setTimeout(resolve, 2000));
 
 			// Validate required fields
 			const requiredFields = [

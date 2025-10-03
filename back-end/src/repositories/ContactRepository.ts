@@ -50,11 +50,6 @@ export class ContactRepository {
 		return await this.repository.findOne({ where: { id } });
 	}
 
-	async findByEmail(email: string): Promise<Contact[]> {
-		// Email functionality removed - return empty array
-		return [];
-	}
-
 	async updateStatus(
 		id: string,
 		status: ContactStatus,

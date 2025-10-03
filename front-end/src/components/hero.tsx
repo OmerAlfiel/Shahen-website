@@ -15,8 +15,6 @@ export default function Hero() {
 	const [deliveryLocation1, setDeliveryLocation1] = useState("");
 	const [deliveryLocation2, setDeliveryLocation2] = useState("");
 	const [qty, setQty] = useState<number>(1);
-
-	// Step-by-step states
 	const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
 	const [truckModalOpen, setTruckModalOpen] = useState(false);
 	const [dateModalOpen, setDateModalOpen] = useState(false);
@@ -26,14 +24,8 @@ export default function Hero() {
 		useState<DateTimePickerValue | null>(null);
 	const [selectedLoadType, setSelectedLoadType] =
 		useState<LoadTypePickerValue | null>(null);
-
-	// Optional insurance value input
 	const [insuranceValue, setInsuranceValue] = useState<number | undefined>();
-
-	// Quote API hook
 	const { getQuote, loading, data, error } = useQuote();
-
-	// Determine if location step is complete
 	const locationComplete = useMemo(() => {
 		if (deliveryType === "single") {
 			return (
@@ -47,7 +39,6 @@ export default function Hero() {
 		);
 	}, [deliveryType, pickupLocation, deliveryLocation1, deliveryLocation2]);
 
-	// Auto-advance from step 1 to step 2 when location is set
 	useEffect(() => {
 		if (step === 1 && locationComplete) {
 			setStep(2);

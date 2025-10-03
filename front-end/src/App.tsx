@@ -15,7 +15,6 @@ function App() {
 	return (
 		<LanguageProvider>
 			<Router>
-				{/* Fixed Background Layer */}
 				<FixedBackground />
 
 				{/* Main Content Layer */}
