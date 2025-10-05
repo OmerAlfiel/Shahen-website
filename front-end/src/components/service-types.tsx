@@ -27,11 +27,7 @@ export default function ServiceTypes() {
 	];
 
 	return (
-		<section
-			className='py-8 md:py-16 relative overflow-hidden bg-gray-50'
-			style={{
-				clipPath: "polygon(0 18%, 100% 2%, 100% 100%, 0 100%)",
-			}}>
+		<section className='section-after-hero py-8 md:py-16 relative overflow-hidden bg-gray-50'>
 			<div className='relative z-10'>
 				{/* App download section */}
 				<div className='relative z-20 mt-20 md:mt-28 text-center'>

@@ -78,17 +78,17 @@ export default function Hero() {
 	};
 
 	return (
-		<div className='relative min-h-[100vh] overflow-hidden pt-16 md:pt-20'>
+		<div className='hero-section'>
 			{/* Hero Content */}
 			<div className='relative min-h-[100vh] overflow-hidden pt-16 md:pt-20 mb-2'>
 				{/* Main heading */}
-				<h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-8 md:mb-10 leading-relaxed max-w-5xl mx-auto mt-4'>
+				<h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-8 md:mb-10 leading-relaxed max-w-5xl mx-auto mt-4 relative z-10'>
 					{language === "ar"
 						? "انقل بضاعتك وحمولتك أينما ترغب بطريقه سهلة وآمنة ."
 						: "Transport your goods and cargo wherever you want in an easy and safe way."}
 				</h1>
 
-				<div className='max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8'>
+				<div className='max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8 relative z-10'>
 					{/* Header tabs */}
 					<div className='flex items-center justify-between border-b border-gray-100 pb-3 md:pb-4'>
 						<div

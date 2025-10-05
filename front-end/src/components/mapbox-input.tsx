@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "./ui/button";
 import { useLanguage } from "../contexts/language-context";
 
@@ -54,6 +55,15 @@ export default function MapboxInput({
 	const mapRef = useRef<any>(null);
 	const markerRef = useRef<any>(null);
 	const { language } = useLanguage();
+
+	// Keep internal searchQuery in sync if parent-controlled value changes externally
+	useEffect(() => {
+		// Only update if value prop changed compared to internal state
+		if (value !== searchQuery) {
+			setSearchQuery(value);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [value, searchQuery]);
 
 	useEffect(() => {
 		getMapboxToken().then(setMapboxToken);
@@ -147,15 +157,154 @@ export default function MapboxInput({
 	};
 
 	const handleConfirm = () => {
+		// Prefer an explicitly selected suggestion; fall back to the map search text if present
 		if (selectedLocation) {
 			setSearchQuery(selectedLocation.address);
 			onChange(selectedLocation.address, selectedLocation.coordinates);
+		} else if (mapSearchQuery.trim()) {
+			// If user typed but didn't click a suggestion, still propagate the raw text
+			setSearchQuery(mapSearchQuery.trim());
+			onChange(mapSearchQuery.trim());
 		}
+
+		// Close & clean regardless to avoid modal getting stuck
 		setShowMap(false);
 		setSelectedLocation(null);
 		setMapSearchQuery("");
 		setMapSuggestions([]);
 	};
+
+	// Body scroll lock when modal open
+	useEffect(() => {
+		if (showMap) {
+			const original = document.body.style.overflow;
+			document.body.style.overflow = "hidden";
+			return () => {
+				document.body.style.overflow = original;
+			};
+		}
+	}, [showMap]);
+
+	const modal = showMap
+		? createPortal(
+				<div className='fixed inset-0 z-[1000] bg-black/50 flex items-center justify-center p-4 animate-fade-in'>
+					<div className='bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl relative'>
+						<div className='p-4 border-b border-gray-200 flex items-center justify-between'>
+							<h3 className='text-lg font-bold text-gray-800'>
+								{language === "ar"
+									? "البحث عن موقع على الخريطة"
+									: "Search for location on map"}
+							</h3>
+							<button
+								onClick={() => setShowMap(false)}
+								className='p-2 hover:bg-gray-100 rounded-lg transition-colors'>
+								<svg
+									className='w-5 h-5'
+									fill='none'
+									stroke='currentColor'
+									viewBox='0 0 24 24'>
+									<path
+										strokeLinecap='round'
+										strokeLinejoin='round'
+										strokeWidth={2}
+										d='M6 18L18 6M6 6l12 12'
+									/>
+								</svg>
+							</button>
+						</div>
+
+						{/* Search input inside map */}
+						<div className='p-4 border-b border-gray-200'>
+							<div className='relative'>
+								<input
+									type='text'
+									value={mapSearchQuery}
+									onChange={(e) => {
+										setMapSearchQuery(e.target.value);
+										handleMapSearch(e.target.value);
+									}}
+									placeholder={
+										language === "ar"
+											? "ابحث عن موقع..."
+											: "Search for a location..."
+									}
+									className={`w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg ${
+										language === "ar" ? "text-right" : "text-left"
+									} focus:outline-none focus:ring-2 focus:ring-[#3BA776] text-gray-700 placeholder-gray-500`}
+								/>
+
+								{/* Map Suggestions Dropdown */}
+								{mapSuggestions.length > 0 && (
+									<div className='absolute z-[1010] w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-48 overflow-y-auto'>
+										{mapSuggestions.map((suggestion, index) => (
+											<button
+												key={index}
+												onClick={() => handleMapSuggestionClick(suggestion)}
+												className={`w-full px-4 py-3 ${
+													language === "ar" ? "text-right" : "text-left"
+												} hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0`}>
+												<div className='flex items-start gap-2'>
+													<svg
+														className='w-4 h-4 text-emerald-600 mt-1 flex-shrink-0'
+														fill='none'
+														stroke='currentColor'
+														viewBox='0 0 24 24'>
+														<path
+															strokeLinecap='round'
+															strokeLinejoin='round'
+															strokeWidth={2}
+															d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
+														/>
+														<path
+															strokeLinecap='round'
+															strokeLinejoin='round'
+															strokeWidth={2}
+															d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
+														/>
+													</svg>
+													<span className='text-sm text-gray-700'>
+														{suggestion.place_name}
+													</span>
+												</div>
+											</button>
+										))}
+									</div>
+								)}
+
+								{isMapSearching && (
+									<div className='absolute z-[1010] w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-4 text-center text-gray-600'>
+										{language === "ar" ? "جاري البحث..." : "Searching..."}
+									</div>
+								)}
+							</div>
+						</div>
+
+						<div ref={mapContainerRef} className='w-full h-[400px]' />
+						<div className='p-4 border-t border-gray-200 flex gap-3'>
+							{selectedLocation && (
+								<Button
+									onClick={handleConfirm}
+									className='flex-1 bg-emerald-600 hover:bg-emerald-700'>
+									{language === "ar" ? "تأكيد الموقع" : "Confirm Location"}
+								</Button>
+							)}
+							<Button
+								onClick={() => {
+									setShowMap(false);
+									setSelectedLocation(null);
+									setMapSearchQuery("");
+									setMapSuggestions([]);
+								}}
+								variant='outline'
+								className='flex-1'>
+								{language === "ar" ? "إلغاء" : "Cancel"}
+							</Button>
+						</div>
+					</div>
+				</div>,
+				document.body
+		  )
+		: null;
 
 	return (
 		<div className='relative'>
@@ -248,123 +397,7 @@ export default function MapboxInput({
 			)}
 
 			{/* Map Modal */}
-			{showMap && (
-				<div className='fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-fade-in'>
-					<div className='bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl'>
-						<div className='p-4 border-b border-gray-200 flex items-center justify-between'>
-							<h3 className='text-lg font-bold text-gray-800'>
-								{language === "ar"
-									? "البحث عن موقع على الخريطة"
-									: "Search for location on map"}
-							</h3>
-							<button
-								onClick={() => setShowMap(false)}
-								className='p-2 hover:bg-gray-100 rounded-lg transition-colors'>
-								<svg
-									className='w-5 h-5'
-									fill='none'
-									stroke='currentColor'
-									viewBox='0 0 24 24'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										strokeWidth={2}
-										d='M6 18L18 6M6 6l12 12'
-									/>
-								</svg>
-							</button>
-						</div>
-
-						{/* Search input inside map */}
-						<div className='p-4 border-b border-gray-200'>
-							<div className='relative'>
-								<input
-									type='text'
-									value={mapSearchQuery}
-									onChange={(e) => {
-										setMapSearchQuery(e.target.value);
-										handleMapSearch(e.target.value);
-									}}
-									placeholder={
-										language === "ar"
-											? "ابحث عن موقع..."
-											: "Search for a location..."
-									}
-									className={`w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg ${
-										language === "ar" ? "text-right" : "text-left"
-									} focus:outline-none focus:ring-2 focus:ring-[#3BA776] text-gray-700 placeholder-gray-500`}
-								/>
-
-								{/* Map Suggestions Dropdown */}
-								{mapSuggestions.length > 0 && (
-									<div className='absolute z-[70] w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-48 overflow-y-auto'>
-										{mapSuggestions.map((suggestion, index) => (
-											<button
-												key={index}
-												onClick={() => handleMapSuggestionClick(suggestion)}
-												className={`w-full px-4 py-3 ${
-													language === "ar" ? "text-right" : "text-left"
-												} hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0`}>
-												<div className='flex items-start gap-2'>
-													<svg
-														className='w-4 h-4 text-emerald-600 mt-1 flex-shrink-0'
-														fill='none'
-														stroke='currentColor'
-														viewBox='0 0 24 24'>
-														<path
-															strokeLinecap='round'
-															strokeLinejoin='round'
-															strokeWidth={2}
-															d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
-														/>
-														<path
-															strokeLinecap='round'
-															strokeLinejoin='round'
-															strokeWidth={2}
-															d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
-														/>
-													</svg>
-													<span className='text-sm text-gray-700'>
-														{suggestion.place_name}
-													</span>
-												</div>
-											</button>
-										))}
-									</div>
-								)}
-
-								{isMapSearching && (
-									<div className='absolute z-[70] w-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-4 text-center text-gray-600'>
-										{language === "ar" ? "جاري البحث..." : "Searching..."}
-									</div>
-								)}
-							</div>
-						</div>
-
-						<div ref={mapContainerRef} className='w-full h-[400px]' />
-						<div className='p-4 border-t border-gray-200 flex gap-3'>
-							{selectedLocation && (
-								<Button
-									onClick={handleConfirm}
-									className='flex-1 bg-emerald-600 hover:bg-emerald-700'>
-									{language === "ar" ? "تأكيد الموقع" : "Confirm Location"}
-								</Button>
-							)}
-							<Button
-								onClick={() => {
-									setShowMap(false);
-									setSelectedLocation(null);
-									setMapSearchQuery("");
-									setMapSuggestions([]);
-								}}
-								variant='outline'
-								className='flex-1'>
-								{language === "ar" ? "إلغاء" : "Cancel"}
-							</Button>
-						</div>
-					</div>
-				</div>
-			)}
+			{modal}
 		</div>
 	);
 }
