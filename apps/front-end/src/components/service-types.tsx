@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AnimatedSection from "./animated-section";
 import { useLanguage } from "../contexts/language-context";
 
 export default function ServiceTypes() {
 	const { language, t } = useLanguage();
+	const [isReady, setIsReady] = useState(false);
+
+	// Ensure viewport is stable before rendering
+	useEffect(() => {
+		// Force a single reflow after mount
+		const timer = setTimeout(() => {
+			setIsReady(true);
+		}, 50);
+
+		return () => clearTimeout(timer);
+	}, []);
 
 	const items = [
 		{
@@ -27,7 +38,9 @@ export default function ServiceTypes() {
 	];
 
 	return (
-		<section className='bg-gray-100 mt-16 pt-8 pb-8 md:mt-20 md:pt-12 md:pb-12 relative'>
+		<section
+			className='bg-gray-100 mt-16 pt-8 pb-8 md:mt-20 md:pt-12 md:pb-12 relative'
+			style={{ minHeight: isReady ? "auto" : "50vh" }}>
 			<div className='relative z-10 max-w-7xl mx-auto px-3 md:px-6'>
 				{/* Cards */}
 				<div
@@ -41,7 +54,9 @@ export default function ServiceTypes() {
 										src={item.img}
 										alt={item.alt}
 										className='max-h-full max-w-[80%] object-contain transition-transform duration-300 group-hover:scale-105'
-										loading='lazy'
+										loading='eager'
+										decoding='async'
+										onLoad={() => setIsReady(true)}
 									/>
 								</div>
 								<h3 className='text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 leading-snug text-center md:text-start'>

@@ -79,23 +79,23 @@ export default function Hero() {
 
 	return (
 		<div className='hero-section'>
-			{/* Hero Content */}
-			<div className='relative min-h-[100vh] overflow-visible pt-16 md:pt-20 mb-2'>
+			{/* Hero Content (removed redundant min-h to rely on .hero-section adaptive height) */}
+			<div className='relative overflow-visible pt-14 sm:pt-16 md:pt-20 mb-2 px-3'>
 				{/* Main heading */}
-				<h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-8 md:mb-10 leading-relaxed max-w-5xl mx-auto mt-4 relative z-20'>
+				<h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-6 sm:mb-8 md:mb-10 leading-relaxed max-w-4xl sm:max-w-5xl mx-auto mt-2 sm:mt-4 relative z-20 px-2'>
 					{language === "ar"
 						? "انقل بضاعتك وحمولتك أينما ترغب بطريقه سهلة وآمنة ."
 						: "Transport your goods and cargo wherever you want in an easy and safe way."}
 				</h1>
 
-				<div className='hero-card-wrapper max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8'>
+				<div className='hero-card-wrapper max-w-5xl sm:max-w-6xl lg:max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-3 sm:p-4 md:p-6 lg:p-8'>
 					{/* Header tabs */}
-					<div className='flex items-center justify-between border-b border-gray-100 pb-3 md:pb-4'>
+					<div className='flex items-center justify-between border-b border-gray-100 pb-2 sm:pb-3 md:pb-4'>
 						<div
 							className={`flex gap-3 md:gap-4 ${
 								language === "ar" ? "flex-row-reverse" : ""
 							}`}>
-							<button className='text-[#3BA776] font-bold text-lg md:text-xl pb-1 border-b-2 border-[#3BA776]'>
+							<button className='text-[#3BA776] font-bold text-base sm:text-lg md:text-xl pb-1 border-b-2 border-[#3BA776]'>
 								{language === "ar" ? "أطلب الآن" : "Order Now"}
 							</button>
 						</div>
@@ -135,7 +135,7 @@ export default function Hero() {
 					</div>
 
 					{/* Location inputs */}
-					<div className='flex flex-col lg:flex-row gap-3 md:gap-4 items-stretch'>
+					<div className='flex flex-col lg:flex-row gap-2 sm:gap-3 md:gap-4 items-stretch'>
 						{language === "ar" ? (
 							<>
 								{/* Pickup Location - first in RTL */}
@@ -237,195 +237,122 @@ export default function Hero() {
 
 					{/* Steps row appears ONLY after both (all) locations filled */}
 					{locationComplete && (
-						<div
-							className={`hero-order-row mt-4 flex flex-col gap-3 ${
-								language === "ar" ? "rtl" : ""
-							}`}
-							style={{ direction: language === "ar" ? "rtl" : "ltr" }}>
-							<div
-								className={`order-row-inner flex items-stretch gap-2 flex-wrap ${
-									language === "ar" ? "flex-row-reverse" : ""
-								}`}>
-								{/* Order components based on language */}
-								{language === "ar" ? (
-									// RTL order: Insurance | Load | DateTime | Qty | Truck (reversed from LTR)
-									<>
-										<input
-											type='number'
-											disabled={!selectedLoadType}
-											className={`order-field order-field-insurance text-right placeholder-gray-500 flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
-												selectedLoadType ? "" : "disabled"
-											}`}
-											placeholder='أدخل قيمة بضاعتك'
-											value={insuranceValue ?? ""}
-											onChange={(e) => {
-												const v = e.target.value;
-												if (v === "") return setInsuranceValue(undefined);
-												const n = Number(v);
-												if (!isNaN(n)) setInsuranceValue(n);
-											}}
-										/>
+						<div className='hero-order-row mt-3 sm:mt-4 flex flex-col gap-2 sm:gap-3'>
+							<div className='order-row-inner w-full flex items-stretch gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap sm:overflow-x-auto'>
+								{/* Truck - Always first (available immediately) */}
+								<button
+									onClick={() => setTruckModalOpen(true)}
+									style={{ order: 1 }}
+									className='order-field order-field-truck whitespace-nowrap flex-1 min-w-[92px] sm:min-w-[120px] h-11 sm:h-[50px] md:h-[55px] cursor-pointer text-sm sm:text-base'>
+									{selectedTruckLabel
+										? selectedTruckLabel
+										: language === "ar"
+										? "اختر الشاحنة"
+										: "Select Truck"}
+								</button>
 
+								{/* Quantity - Second (unlocked after truck) */}
+								<div
+									style={{ order: 2 }}
+									className={`order-field order-field-qty flex-shrink-0 w-[110px] sm:w-[140px] h-11 sm:h-[50px] md:h-[55px] ${
+										selectedTruckLabel ? "" : "disabled"
+									}`}>
+									<span className='qty-label hidden lg:inline-block text-xs md:text-sm'>
+										{language === "ar" ? "عدد الشاحنات" : "Qty"}
+									</span>
+									<div className='flex items-center gap-1'>
 										<button
-											disabled={!selectedDateTime}
-											onClick={() => setLoadModalOpen(true)}
-											className={`order-field order-field-load flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
-												selectedDateTime ? "cursor-pointer" : "disabled"
-											}`}>
-											{selectedLoadType
-												? selectedLoadType.loadType
-												: "نوع الحمولة"}
+											aria-label='decrement'
+											onClick={() =>
+												selectedTruckLabel && setQty((q) => Math.max(q - 1, 1))
+											}
+											className='qty-btn'>
+											-
 										</button>
-
+										<span className='qty-value'>{qty}</span>
 										<button
-											disabled={!selectedTruckLabel}
-											onClick={() => setDateModalOpen(true)}
-											className={`order-field order-field-datetime flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
-												selectedTruckLabel ? "cursor-pointer" : "disabled"
-											}`}>
-											{selectedDateTime
-												? `${selectedDateTime.date.toLocaleDateString("ar-SA", {
-														weekday: "long",
-														month: "long",
-														day: "numeric",
-												  })} ${selectedDateTime.time
-														.replace("AM", "ص")
-														.replace("PM", "م")}`
-												: "تاريخ ووقت"}
+											aria-label='increment'
+											onClick={() =>
+												selectedTruckLabel && setQty((q) => Math.min(q + 1, 99))
+											}
+											className='qty-btn'>
+											+
 										</button>
+									</div>
+								</div>
 
-										<div
-											className={`order-field order-field-qty flex-shrink-0 w-[120px] sm:w-[140px] h-[50px] md:h-[55px] ${
-												selectedTruckLabel ? "" : "disabled"
-											}`}>
-											<span className='qty-label hidden lg:inline-block text-xs md:text-sm'>
-												عدد الشاحنات
-											</span>
-											<div className='flex items-center gap-1'>
-												<button
-													aria-label='increment'
-													onClick={() =>
-														selectedTruckLabel &&
-														setQty((q) => Math.min(q + 1, 99))
-													}
-													className='qty-btn'>
-													+
-												</button>
-												<span className='qty-value'>{qty}</span>
-												<button
-													aria-label='decrement'
-													onClick={() =>
-														selectedTruckLabel &&
-														setQty((q) => Math.max(q - 1, 1))
-													}
-													className='qty-btn'>
-													-
-												</button>
-											</div>
-										</div>
+								{/* Date & Time - Third (unlocked after truck) */}
+								<button
+									disabled={!selectedTruckLabel}
+									onClick={() => setDateModalOpen(true)}
+									style={{ order: 3 }}
+									className={`order-field order-field-datetime flex-1 min-w-[90px] sm:min-w-[130px] h-11 sm:h-[50px] md:h-[55px] text-sm sm:text-base ${
+										selectedTruckLabel ? "cursor-pointer" : "disabled"
+									}`}>
+									{selectedDateTime
+										? language === "ar"
+											? `${selectedDateTime.date.toLocaleDateString("ar-SA", {
+													weekday: "long",
+													month: "long",
+													day: "numeric",
+											  })} ${selectedDateTime.time
+													.replace("AM", "ص")
+													.replace("PM", "م")}`
+											: `${selectedDateTime.date.toLocaleDateString(undefined, {
+													weekday: "short",
+													month: "short",
+													day: "numeric",
+											  })} ${selectedDateTime.time}`
+										: language === "ar"
+										? "تاريخ ووقت"
+										: "Date & Time"}
+								</button>
 
-										<button
-											onClick={() => setTruckModalOpen(true)}
-											className={`order-field order-field-truck whitespace-nowrap flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
-												selectedTruckLabel ? "cursor-pointer" : ""
-											}`}>
-											{selectedTruckLabel ? selectedTruckLabel : "اختر الشاحنة"}
-										</button>
-									</>
-								) : (
-									// LTR order: Truck | Qty | DateTime | Load | Insurance
-									<>
-										<button
-											onClick={() => setTruckModalOpen(true)}
-											className={`order-field order-field-truck whitespace-nowrap flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
-												selectedTruckLabel ? "cursor-pointer" : ""
-											}`}>
-											{selectedTruckLabel ? selectedTruckLabel : "Select Truck"}
-										</button>
+								{/* Load Type - Fourth (unlocked after date) */}
+								<button
+									disabled={!selectedDateTime}
+									onClick={() => setLoadModalOpen(true)}
+									style={{ order: 4 }}
+									className={`order-field order-field-load flex-1 min-w-[90px] sm:min-w-[120px] h-11 sm:h-[50px] md:h-[55px] text-sm sm:text-base ${
+										selectedDateTime ? "cursor-pointer" : "disabled"
+									}`}>
+									{selectedLoadType
+										? selectedLoadType.loadType
+										: language === "ar"
+										? "نوع الحمولة"
+										: "Load Type"}
+								</button>
 
-										<div
-											className={`order-field order-field-qty flex-shrink-0 w-[120px] sm:w-[140px] h-[50px] md:h-[55px] ${
-												selectedTruckLabel ? "" : "disabled"
-											}`}>
-											<span className='qty-label hidden lg:inline-block'>
-												Qty
-											</span>
-											<div className='flex items-center gap-1'>
-												<button
-													aria-label='decrement'
-													onClick={() =>
-														selectedTruckLabel &&
-														setQty((q) => Math.max(q - 1, 1))
-													}
-													className='qty-btn'>
-													-
-												</button>
-												<span className='qty-value'>{qty}</span>
-												<button
-													aria-label='increment'
-													onClick={() =>
-														selectedTruckLabel &&
-														setQty((q) => Math.min(q + 1, 99))
-													}
-													className='qty-btn'>
-													+
-												</button>
-											</div>
-										</div>
-
-										<button
-											disabled={!selectedTruckLabel}
-											onClick={() => setDateModalOpen(true)}
-											className={`order-field order-field-datetime flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
-												selectedTruckLabel ? "cursor-pointer" : "disabled"
-											}`}>
-											{selectedDateTime
-												? `${selectedDateTime.date.toLocaleDateString(
-														undefined,
-														{
-															weekday: "short",
-															month: "short",
-															day: "numeric",
-														}
-												  )} ${selectedDateTime.time}`
-												: "Date & Time"}
-										</button>
-
-										<button
-											disabled={!selectedDateTime}
-											onClick={() => setLoadModalOpen(true)}
-											className={`order-field order-field-load flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
-												selectedDateTime ? "cursor-pointer" : "disabled"
-											}`}>
-											{selectedLoadType
-												? selectedLoadType.loadType
-												: "Load Type"}
-										</button>
-
-										<input
-											type='number'
-											disabled={!selectedLoadType}
-											className={`order-field order-field-insurance text-right placeholder-gray-500 flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
-												selectedLoadType ? "" : "disabled"
-											}`}
-											placeholder='Enter your goods value'
-											value={insuranceValue ?? ""}
-											onChange={(e) => {
-												const v = e.target.value;
-												if (v === "") return setInsuranceValue(undefined);
-												const n = Number(v);
-												if (!isNaN(n)) setInsuranceValue(n);
-											}}
-										/>
-									</>
-								)}
+								{/* Insurance - Fifth (unlocked after load type) */}
+								<input
+									type='number'
+									disabled={!selectedLoadType}
+									style={{ order: 5 }}
+									className={`order-field order-field-insurance text-sm sm:text-base ${
+										language === "ar" ? "text-right" : "text-left"
+									} placeholder-gray-500 flex-1 min-w-[90px] sm:min-w-[130px] h-11 sm:h-[50px] md:h-[55px] ${
+										selectedLoadType ? "" : "disabled"
+									}`}
+									placeholder={
+										language === "ar"
+											? "أدخل قيمة بضاعتك"
+											: "Enter your goods value"
+									}
+									value={insuranceValue ?? ""}
+									onChange={(e) => {
+										const v = e.target.value;
+										if (v === "") return setInsuranceValue(undefined);
+										const n = Number(v);
+										if (!isNaN(n)) setInsuranceValue(n);
+									}}
+								/>
 							</div>
 
-							{/* Get Price */}
-							<div className='mt-4 w-full flex justify-center'>
+							{/* Get Price Button */}
+							<div className='mt-3 sm:mt-4 w-full flex justify-center'>
 								<button
 									disabled={!canGetPrice}
-									className={`get-price-btn-main w-full md:w-auto md:min-w-[240px] font-bold h-[60px] px-10 rounded-lg text-lg shadow-md transition-colors duration-300 ${
+									className={`get-price-btn-main w-full md:w-auto md:min-w-[220px] font-bold h-12 sm:h-[60px] px-6 sm:px-10 rounded-lg text-base sm:text-lg shadow-md transition-colors duration-300 ${
 										canGetPrice
 											? "bg-[#018545] hover:bg-[#01763C] text-white"
 											: "bg-gray-300 text-white cursor-not-allowed"
@@ -442,8 +369,6 @@ export default function Hero() {
 							</div>
 						</div>
 					)}
-
-					{/* (Legacy Get Price button removed - now included within order row) */}
 
 					{/* Modals */}
 					<TruckPicker
@@ -501,15 +426,13 @@ export default function Hero() {
 				</div>
 
 				{/* Download / partnership area within hero diagonal */}
-				<div className='hero-download-area'>
+				<div className='hero-download-area compact-mobile'>
 					<p>
 						{language === "ar"
 							? "نسعى لتحقيق شراكة متميزة عبر تسخير كل الإمكانات لخدمة عملائنا."
 							: "We strive to achieve a distinguished partnership by harnessing all capabilities to serve our customers."}
 					</p>
-					<div
-						className='hero-download-badges flex justify-center gap-8 flex-wrap'
-						style={{ marginTop: "2.8rem" }}>
+					<div className='hero-download-badges flex justify-center gap-6 sm:gap-8 flex-wrap mt-8 sm:mt-11'>
 						<a
 							href='https://play.google.com/store/apps/details?id=com.shahen&gl=SA'
 							target='_blank'

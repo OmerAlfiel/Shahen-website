@@ -13,12 +13,11 @@ export default function OrderProcess() {
 	const isArabic = language === "ar";
 
 	return (
-		<section
-			className='bg-white flex items-center justify-center min-h-screen'
-			style={{ padding: "80px 0px" }}>
-			<div className='container mx-auto px-2'>
-				<AnimatedSection animation='slide-in-left'>
-					<div className='max-w-4xl mx-auto flex justify-center'>
+		<section className='bg-white py-14 sm:py-16 md:py-20 md:min-h-[70dvh]'>
+			<div className='container mx-auto px-3'>
+				{/* Parent layout renders immediately; only inner content animates to avoid scroll/anchor jump */}
+				<div className='max-w-4xl mx-auto flex justify-center w-full'>
+					<AnimatedSection animation='slide-in-left' initiallyVisible>
 						{isArabic ? (
 							<div className='flex flex-col md:flex-row items-center bg-white rounded-3xl p-8 shadow-lg gap-8'>
 								{/* Video  */}
@@ -134,8 +133,8 @@ export default function OrderProcess() {
 								</div>
 							</div>
 						)}
-					</div>
-				</AnimatedSection>
+					</AnimatedSection>
+				</div>
 			</div>
 		</section>
 	);

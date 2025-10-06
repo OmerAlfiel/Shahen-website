@@ -9,8 +9,11 @@ import LoginPage from "./pages/login";
 import DashboardPage from "./pages/dashboard";
 import TrackingPage from "./pages/tracking";
 import "./styles/globals.css";
+import useViewportHeight from "./hooks/use-viewport-height";
 
 function App() {
+	// Stabilize mobile viewport units to avoid layout jump when URL bars collapse/expand
+	useViewportHeight();
 	return (
 		<LanguageProvider>
 			<Router>

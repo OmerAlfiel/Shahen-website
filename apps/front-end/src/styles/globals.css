@@ -139,18 +139,47 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 
+	/* Replace the hero-section viewport height logic with fixed values */
 	.hero-section {
 		position: relative;
-		height: 100vh; /* full viewport */
-		background: url(../../public/images/mobileneworderback.png) no-repeat center
-			center fixed;
+		/* Dynamic viewport height using JS-updated --vh (1% of visual viewport).
+		   Fallback: at least 600px, cap at 100vh to avoid oversizing before script runs. */
+		--vh100: calc(var(--vh, 1vh) * 100);
+		min-height: clamp(600px, var(--vh100), 100vh);
+		height: auto;
+		background: url(../../public/images/mobileneworderback.png) no-repeat center;
+		background-repeat: no-repeat;
+		background-position: center center;
 		background-size: cover;
+		background-attachment: scroll;
 		display: flex;
 		flex-direction: column;
-		overflow: visible; /* allow floating card + download area */
+		overflow: visible;
 		padding-top: 5rem;
 		padding-bottom: 0;
 		z-index: 0;
+		/* Prevent layout shift during load */
+		contain: layout;
+	}
+	@media (min-width: 768px) {
+		.hero-section {
+			/* Desktop can safely use standard 100vh */
+			min-height: 100vh;
+			background-attachment: fixed;
+		}
+	}
+	/* Add to prevent cumulative layout shift */
+	@media (max-width: 767px) {
+		.hero-section {
+			/* Reserve space for content */
+			min-height: calc(100vh - 60px);
+		}
+		/* Ensure images don't cause reflow */
+		.hero-section img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+		}
 	}
 
 	.hero-section::before {
@@ -165,9 +194,6 @@
 		z-index: 0; /* base layer */
 	}
 
-	/* New white diagonal overlay inside hero (replaces previous clip-path removal)
-	   This recreates the slanted transition area so we can place content (download badges)
-	   inside the hero instead of the next section. */
 	.hero-section::after {
 		content: "";
 		position: absolute;
@@ -192,6 +218,24 @@
 		margin-left: auto;
 		margin-right: auto;
 		transform: translateY(40px);
+	}
+
+	/* Compact mobile variant */
+	@media (max-width: 640px) {
+		.hero-download-area.compact-mobile {
+			margin-top: 1.5rem;
+
+			transform: translateY(20px);
+		}
+		.hero-download-area.compact-mobile p {
+			font-size: 0.95rem;
+			line-height: 1.5;
+			margin-bottom: 0.85rem;
+		}
+		.hero-download-badges a img {
+			height: 46px;
+			box-shadow: 0 3px 14px -3px rgba(0, 0, 0, 0.25);
+		}
 	}
 
 	.hero-download-area p {
@@ -221,13 +265,14 @@
 		position: relative;
 	}
 
-	/* Horizontal order row (post-location completion)
-	   Default: keep previous horizontal behavior for larger screens.
-	   Mobile (<640px): switch to wrapped layout instead of horizontal scroll. */
 	.hero-order-row .order-row-inner {
-		flex-wrap: nowrap; /* will be overridden on small screens */
-		overflow-x: auto; /* hidden/disabled on small screens */
 		scrollbar-width: none;
+	}
+	/* Only enable horizontal scrolling on screens >= 640px where nowrap is applied via sm:flex-nowrap */
+	@media (min-width: 640px) {
+		.hero-order-row .order-row-inner {
+			overflow-x: auto;
+		}
 	}
 	@media (max-width: 640px) {
 		.hero-order-row .order-row-inner {
@@ -239,7 +284,7 @@
 		.hero-order-row .order-row-inner .order-field {
 			flex: 1 1 calc(50% - 6px);
 			min-width: calc(50% - 6px);
-			/* ensure height stays consistent with component overrides */
+
 			min-height: 50px;
 			white-space: normal; /* allow label wrapping if needed on narrow screens */
 			font-size: 14px;
