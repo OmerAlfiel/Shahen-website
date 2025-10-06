@@ -16,6 +16,19 @@ dotenv.config();
 const app = express();
 const PORT = parseInt(process.env.PORT || "3001", 10);
 
+// Validate PORT
+if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
+	console.error(`❌ Invalid PORT: ${process.env.PORT}. Must be an integer between 1 and 65535`);
+	process.exit(1);
+}
+
+console.log(`🔧 Starting with PORT: ${PORT} (type: ${typeof PORT})`);
+console.log(`🔧 Environment variables check:`);
+console.log(`   - NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`   - PORT: ${process.env.PORT}`);
+console.log(`   - DB_HOST: ${process.env.DB_HOST ? 'SET' : 'NOT SET'}`);
+console.log(`   - DATABASE_URL: ${process.env.DATABASE_URL ? 'SET' : 'NOT SET'}`);
+
 // Security middleware
 app.use(
 	helmet({
@@ -71,8 +84,8 @@ app.get("/api/health", (_req, res) => {
 		env_check: {
 			has_db_host: !!process.env.DB_HOST,
 			has_db_password: !!process.env.DB_PASSWORD,
-			has_database_url: !!process.env.DATABASE_URL
-		}
+			has_database_url: !!process.env.DATABASE_URL,
+		},
 	};
 
 	res.status(200).json(health);
@@ -87,11 +100,12 @@ app.use(errorHandler);
 // Initialize database and start server
 const startServer = async () => {
 	try {
-		// Start the server first
-		const server = app.listen(PORT, () => {
+		// Start the server first - bind to 0.0.0.0 for Railway
+		const server = app.listen(PORT, "0.0.0.0", () => {
 			console.log(`🚀 Server is running on port ${PORT}`);
 			console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
 			console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
+			console.log(`🔧 Server bound to 0.0.0.0:${PORT}`);
 		});
 
 		// Try to initialize database (non-blocking)
