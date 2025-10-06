@@ -2,6 +2,10 @@ import "reflect-metadata";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import compression from "compression";
+
 import contactRoutes from "./modules/contact/contact.routes";
 import quoteRoutes from "./modules/quote/quote.routes";
 import { errorHandler } from "./middleware/errorHandler";
@@ -11,11 +15,40 @@ import { initializeDatabase } from "./config/database";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
-// Middleware
+
+// Security middleware
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			directives: {
+				defaultSrc: ["'self'"],
+				styleSrc: ["'self'", "'unsafe-inline'"],
+				scriptSrc: ["'self'"],
+				imgSrc: ["'self'", "data:", "https:"],
+			},
+		},
+	})
+);
+
+// Rate limiting
+const limiter = rateLimit({
+	windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"), // 15 minutes
+	max: parseInt(process.env.RATE_LIMIT_MAX || "100"), // limit each IP to 100 requests per windowMs
+	message: "Too many requests from this IP, please try again later.",
+});
+
+app.use(limiter);
+
+// Compression
+app.use(compression());
+
+// CORS
 app.use(
 	cors({
 		origin: process.env.FRONTEND_URL || "http://localhost:3000",
 		credentials: true,
+		methods: ["GET", "POST", "PUT", "DELETE"],
+		allowedHeaders: ["Content-Type", "Authorization"],
 	})
 );
 
@@ -31,7 +64,8 @@ app.get("/api/health", (_req, res) => {
 		status: "OK",
 		message: "Shahen Backend API is running",
 		timestamp: new Date().toISOString(),
-		database: "Connected",
+		environment: process.env.NODE_ENV,
+		version: "1.0.0",
 	});
 });
 
@@ -44,29 +78,17 @@ app.use(errorHandler);
 // Initialize database and start server
 const startServer = async () => {
 	try {
-		// Initialize database connection
 		await initializeDatabase();
 		console.log(`📊 Database: PostgreSQL connected`);
 
-		// Start server
 		app.listen(PORT, () => {
 			console.log(`🚀 Server is running on port ${PORT}`);
-			console.log(
-				`🌐 API Documentation available at http://localhost:${PORT}/api/health`
-			);
-			console.log(
-				`🔗 Frontend URL: ${
-					process.env.FRONTEND_URL || "http://localhost:3000"
-				}`
-			);
+			console.log(`� Environment: ${process.env.NODE_ENV}`);
+			console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
 		});
 	} catch (error) {
 		console.error("❌ Failed to start server:", error);
-		console.error(
-			`⚠️  Database connection failed: ${
-				error instanceof Error ? error.message : String(error)
-			}`
-		);
+		process.exit(1);
 	}
 };
 

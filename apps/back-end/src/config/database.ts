@@ -14,11 +14,18 @@ export const AppDataSource = new DataSource({
 	synchronize: process.env.NODE_ENV === "development",
 	logging: process.env.NODE_ENV === "development",
 	entities: [Contact],
-	migrations: ["src/migrations/*.ts"],
+	migrations: ["dist/migrations/*.js"], // Updated for production
 	ssl:
 		process.env.NODE_ENV === "production"
 			? { rejectUnauthorized: false }
 			: false,
+	// Production optimizations
+	extra: {
+		max: 20, // Maximum number of connection pool
+		min: 5, // Minimum number of connection pool
+		acquire: 30000, // Maximum time to get connection
+		idle: 10000, // Maximum time connection can be idle
+	},
 });
 
 export const initializeDatabase = async (): Promise<void> => {
