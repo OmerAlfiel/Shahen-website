@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import express from "express";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -87,38 +87,71 @@ const originPatterns: RegExp[] = [/^https?:\/\/[a-z0-9-]+-.*\.vercel\.app$/i];
 
 console.log("🌐 CORS allowed origins:", staticAllowedOrigins);
 
-app.use(
-	cors({
-		origin: (origin, callback) => {
-			if (!origin) {
-				// Non-browser or same-origin requests
-				return callback(null, true);
-			}
+// Helper to log detailed CORS decision making (only in non-production to reduce noise)
+const logCors = (msg: string): void => {
+	if (process.env.NODE_ENV !== "production") {
+		console.log(msg);
+	}
+};
 
-			if (
-				staticAllowedOrigins.includes(origin) ||
-				originPatterns.some((r) => r.test(origin))
-			) {
-				return callback(null, true);
-			}
+const corsOptions: CorsOptions = {
+	origin: (origin, callback) => {
+		if (!origin) {
+			// Non-browser or same-origin (like curl / server-to-server)
+			logCors("CORS: allowing request with no origin header (non-browser)");
+			return callback(null, true);
+		}
 
-			console.warn(`🚫 CORS blocked request from origin: ${origin}`);
-			return callback(new Error("Not allowed by CORS"));
-		},
-		credentials: true,
-		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-		allowedHeaders: [
-			"Content-Type",
-			"Authorization",
-			"Accept",
-			"Origin",
-			"X-Requested-With",
-		],
-		exposedHeaders: ["Content-Length"],
-		maxAge: 600, // cache preflight for 10 minutes
-		optionsSuccessStatus: 204,
-	})
-);
+		const matchedStatic = staticAllowedOrigins.includes(origin);
+		const matchedPattern = originPatterns.some((r) => r.test(origin));
+
+		if (matchedStatic || matchedPattern) {
+			logCors(
+				`CORS: ✅ allowed origin: ${origin} (${
+					matchedStatic ? "static" : "pattern"
+				})`
+			);
+			return callback(null, true);
+		}
+
+		logCors(`CORS: ❌ blocked origin: ${origin}`);
+		return callback(new Error("Not allowed by CORS"));
+	},
+	credentials: true,
+	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+	// Let the cors library reflect requested headers automatically by omitting allowedHeaders.
+	exposedHeaders: ["Content-Length"],
+	maxAge: 600,
+	optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+// Put CORS & preflight handling as early as possible
+app.use((req, res, next) => {
+	if (req.method === "OPTIONS") {
+		// For debugging preflight issues, log requested headers & method
+		logCors(
+			`Preflight -> Origin: ${req.headers.origin} | Request-Method: ${req.headers["access-control-request-method"]} | Request-Headers: ${req.headers["access-control-request-headers"]}`
+		);
+	}
+	next();
+});
+app.options("*", cors(corsOptions));
+
+// Debug endpoint to verify what the server thinks the allowed origins are (avoid leaking in prod)
+app.get("/api/debug/cors", (req, res): void => {
+	if (process.env.NODE_ENV === "production" && !process.env.ENABLE_CORS_DEBUG) {
+		res.status(403).json({ message: "CORS debug disabled in production" });
+		return;
+	}
+	res.json({
+		staticAllowedOrigins,
+		originPatterns: originPatterns.map((r) => r.toString()),
+		requestOrigin: req.headers.origin,
+		nodeEnv: process.env.NODE_ENV,
+	});
+});
 // Explicitly handle OPTIONS in case some proxies strip automatic handling
 app.options("*", cors());
 
@@ -158,12 +191,6 @@ app.use(errorHandler);
 const startServer = async () => {
 	try {
 		// Start the server first - bind to 0.0.0.0 for Railway
-		const server = app.listen(PORT, "0.0.0.0", () => {
-			console.log(`🚀 Server is running on port ${PORT}`);
-			console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-			console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
-			console.log(`🔧 Server bound to 0.0.0.0:${PORT}`);
-		});
 		try {
 			await initializeDatabase();
 			console.log(`📊 Database: PostgreSQL connected`);
