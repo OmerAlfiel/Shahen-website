@@ -59,15 +59,68 @@ app.use(limiter);
 // Compression
 app.use(compression());
 
-// CORS
+// ---------- CORS Configuration ----------
+// Allow multiple origins via CORS_ORIGINS (comma separated) or fallback to FRONTEND_URL
+// Defaults include localhost and the known production domain.
+const defaultOrigins = [
+	"http://localhost:3000",
+	"http://localhost:5173",
+	"https://shahen-website.vercel.app",
+];
+const envOrigins = (process.env.CORS_ORIGINS || "")
+	.split(",")
+	.map((o) => o.trim())
+	.filter(Boolean);
+
+const staticAllowedOrigins = Array.from(
+	new Set(
+		[
+			...(envOrigins.length ? envOrigins : []),
+			process.env.FRONTEND_URL || "",
+			...defaultOrigins,
+		].filter(Boolean)
+	)
+);
+
+// Optional regex patterns (e.g., all vercel preview deployments)
+const originPatterns: RegExp[] = [/^https?:\/\/[a-z0-9-]+-.*\.vercel\.app$/i];
+
+console.log("🌐 CORS allowed origins:", staticAllowedOrigins);
+
 app.use(
 	cors({
-		origin: process.env.FRONTEND_URL || "http://localhost:3000",
+		origin: (origin, callback) => {
+			if (!origin) {
+				// Non-browser or same-origin requests
+				return callback(null, true);
+			}
+
+			if (
+				staticAllowedOrigins.includes(origin) ||
+				originPatterns.some((r) => r.test(origin))
+			) {
+				return callback(null, true);
+			}
+
+			console.warn(`🚫 CORS blocked request from origin: ${origin}`);
+			return callback(new Error("Not allowed by CORS"));
+		},
 		credentials: true,
-		methods: ["GET", "POST", "PUT", "DELETE"],
-		allowedHeaders: ["Content-Type", "Authorization"],
+		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+		allowedHeaders: [
+			"Content-Type",
+			"Authorization",
+			"Accept",
+			"Origin",
+			"X-Requested-With",
+		],
+		exposedHeaders: ["Content-Length"],
+		maxAge: 600, // cache preflight for 10 minutes
+		optionsSuccessStatus: 204,
 	})
 );
+// Explicitly handle OPTIONS in case some proxies strip automatic handling
+app.options("*", cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
