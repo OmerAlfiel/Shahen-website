@@ -4,19 +4,27 @@ import AnimatedSection from "./animated-section";
 
 export default function TruckTypes() {
 	const { language } = useLanguage();
+	const isRTL = language === "ar";
 	const [activeCategory, setActiveCategory] = useState("Traila");
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-	const scrollLeft = () => {
-		if (scrollContainerRef.current) {
-			scrollContainerRef.current.scrollBy({ left: -200, behavior: "smooth" });
-		}
+	// Unified scroll handlers that respect RTL direction
+	const scrollPrev = () => {
+		if (!scrollContainerRef.current) return;
+		// In RTL, visually previous is to the right, so positive scroll moves content right (negative logical direction varies by browser but scrollBy handles offset)
+		scrollContainerRef.current.scrollBy({
+			left: isRTL ? 200 : -200,
+			behavior: "smooth",
+		});
 	};
 
-	const scrollRight = () => {
-		if (scrollContainerRef.current) {
-			scrollContainerRef.current.scrollBy({ left: 200, behavior: "smooth" });
-		}
+	const scrollNext = () => {
+		if (!scrollContainerRef.current) return;
+		// In RTL, next is to the left
+		scrollContainerRef.current.scrollBy({
+			left: isRTL ? -200 : 200,
+			behavior: "smooth",
+		});
 	};
 
 	const truckCategories = [
@@ -215,14 +223,14 @@ export default function TruckTypes() {
 							style={{ paddingTop: "40px" }}>
 							{/* Navigation Container */}
 							<div className='relative w-full flex items-center justify-center'>
-								{/* Previous Button - Only on mobile */}
+								{/* Previous Button (mobile) - position swaps in RTL */}
 								<button
-									onClick={language === "ar" ? scrollRight : scrollLeft}
-									className='absolute left-0 z-40 w-8 h-8 flex items-center justify-center bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-colors md:hidden'
-									style={{
-										transform: "translateY(-50%)",
-										top: "50%",
-									}}>
+									onClick={scrollPrev}
+									className={`absolute z-40 w-8 h-8 flex items-center justify-center bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-colors md:hidden ${
+										isRTL ? "right-0" : "left-0"
+									}`}
+									style={{ transform: "translateY(-50%)", top: "50%" }}
+									aria-label={isRTL ? "السابق" : "Previous"}>
 									<svg
 										className='w-4 h-4 text-gray-600'
 										fill='none'
@@ -232,7 +240,8 @@ export default function TruckTypes() {
 											strokeLinecap='round'
 											strokeLinejoin='round'
 											strokeWidth={2}
-											d={language === "ar" ? "M9 5l7 7-7 7" : "M15 19l-7-7 7-7"}
+											// Chevron left in LTR, chevron right in RTL
+											d={isRTL ? "M9 5l7 7-7 7" : "M15 19l-7-7 7-7"}
 										/>
 									</svg>
 								</button>
@@ -290,14 +299,14 @@ export default function TruckTypes() {
 									))}
 								</div>
 
-								{/* Next Button - Only on mobile */}
+								{/* Next Button (mobile) - position swaps in RTL */}
 								<button
-									onClick={language === "ar" ? scrollLeft : scrollRight}
-									className='absolute right-0 z-40 w-8 h-8 flex items-center justify-center bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-colors md:hidden'
-									style={{
-										transform: "translateY(-50%)",
-										top: "50%",
-									}}>
+									onClick={scrollNext}
+									className={`absolute z-40 w-8 h-8 flex items-center justify-center bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-colors md:hidden ${
+										isRTL ? "left-0" : "right-0"
+									}`}
+									style={{ transform: "translateY(-50%)", top: "50%" }}
+									aria-label={isRTL ? "التالي" : "Next"}>
 									<svg
 										className='w-4 h-4 text-gray-600'
 										fill='none'
@@ -307,7 +316,8 @@ export default function TruckTypes() {
 											strokeLinecap='round'
 											strokeLinejoin='round'
 											strokeWidth={2}
-											d={language === "ar" ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"}
+											// Chevron right in LTR, chevron left in RTL
+											d={isRTL ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"}
 										/>
 									</svg>
 								</button>
