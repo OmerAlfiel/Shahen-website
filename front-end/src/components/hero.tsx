@@ -80,15 +80,15 @@ export default function Hero() {
 	return (
 		<div className='hero-section'>
 			{/* Hero Content */}
-			<div className='relative min-h-[100vh] overflow-hidden pt-16 md:pt-20 mb-2'>
+			<div className='relative min-h-[100vh] overflow-visible pt-16 md:pt-20 mb-2'>
 				{/* Main heading */}
-				<h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-8 md:mb-10 leading-relaxed max-w-5xl mx-auto mt-4 relative z-10'>
+				<h1 className='text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-8 md:mb-10 leading-relaxed max-w-5xl mx-auto mt-4 relative z-20'>
 					{language === "ar"
 						? "انقل بضاعتك وحمولتك أينما ترغب بطريقه سهلة وآمنة ."
 						: "Transport your goods and cargo wherever you want in an easy and safe way."}
 				</h1>
 
-				<div className='max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8 relative z-10'>
+				<div className='hero-card-wrapper max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8'>
 					{/* Header tabs */}
 					<div className='flex items-center justify-between border-b border-gray-100 pb-3 md:pb-4'>
 						<div
@@ -432,6 +432,45 @@ export default function Hero() {
 								: "Failed to calculate price"}
 						</div>
 					)}
+				</div>
+
+				{/* Download / partnership area within hero diagonal */}
+				<div className='hero-download-area'>
+					<p>
+						{language === "ar"
+							? "نسعى لتحقيق شراكة متميزة عبر تسخير كل الإمكانات لخدمة عملائنا."
+							: "We strive to achieve a distinguished partnership by harnessing all capabilities to serve our customers."}
+					</p>
+					<div className='hero-download-badges flex justify-center gap-4 flex-wrap'>
+						<a
+							href='https://play.google.com/store/apps/details?id=com.shahen&gl=SA'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='inline-block'>
+							<img
+								src='/google-play-badge.png'
+								alt={
+									language === "ar"
+										? "احصل عليه من Google Play"
+										: "Get it on Google Play"
+								}
+							/>
+						</a>
+						<a
+							href='https://apps.apple.com/sa/app/shahen-%D8%B4%D8%AD%D9%86/id1568118147'
+							target='_blank'
+							rel='noopener noreferrer'
+							className='inline-block'>
+							<img
+								src='/app-store-badge.png'
+								alt={
+									language === "ar"
+										? "حمله من App Store"
+										: "Download on the App Store"
+								}
+							/>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

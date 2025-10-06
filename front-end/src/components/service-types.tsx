@@ -27,40 +27,9 @@ export default function ServiceTypes() {
 	];
 
 	return (
-		<section className='section-after-hero py-8 md:py-16 relative overflow-hidden bg-gray-50'>
+		<section className=' bg-gray-100 py-2 md:py-2 relative overflow-hidden'>
 			<div className='relative z-10'>
-				{/* App download section */}
-				<div className='relative z-20 mt-20 md:mt-28 text-center'>
-					<p className='text-black text-lg md:text-xl lg:text-2xl font-medium mb-8 max-w-3xl mx-auto leading-relaxed backdrop-blur-sm rounded-2xl p-6'>
-						{language === "ar"
-							? "نسعى لتحقيق شراكة متميزة عبر تسخير كل الإمكانات لخدمة عملائنا."
-							: "We strive to achieve a distinguished partnership by harnessing all capabilities to serve our customers."}
-					</p>
-					<div className='flex justify-center gap-4 flex-wrap'>
-						<a
-							href='https://play.google.com/store/apps/details?id=com.shahen&gl=SA'
-							target='_blank'
-							rel='noopener noreferrer'
-							className='inline-block transform hover:scale-105 transition-transform duration-300'>
-							<img
-								src='/google-play-badge.png'
-								alt='Get it on Google Play'
-								className='h-14 md:h-16 shadow-lg rounded-lg'
-							/>
-						</a>
-						<a
-							href='https://apps.apple.com/sa/app/shahen-%D8%B4%D8%AD%D9%86/id1568118147'
-							target='_blank'
-							rel='noopener noreferrer'
-							className='inline-block transform hover:scale-105 transition-transform duration-300'>
-							<img
-								src='/app-store-badge.png'
-								alt='Download on the App Store'
-								className='h-14 md:h-16 shadow-lg rounded-lg'
-							/>
-						</a>
-					</div>
-				</div>
+				{/* Download section moved into hero */}
 
 				{/* Cards */}
 				<div className='container mx-auto px-1 mt-16 md:mt-20'>
