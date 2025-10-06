@@ -507,7 +507,9 @@ export default function Hero() {
 							? "نسعى لتحقيق شراكة متميزة عبر تسخير كل الإمكانات لخدمة عملائنا."
 							: "We strive to achieve a distinguished partnership by harnessing all capabilities to serve our customers."}
 					</p>
-					<div className='hero-download-badges flex justify-center gap-4 flex-wrap'>
+					<div
+						className='hero-download-badges flex justify-center gap-8 flex-wrap'
+						style={{ marginTop: "2.8rem" }}>
 						<a
 							href='https://play.google.com/store/apps/details?id=com.shahen&gl=SA'
 							target='_blank'

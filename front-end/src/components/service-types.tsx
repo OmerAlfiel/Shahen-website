@@ -27,7 +27,7 @@ export default function ServiceTypes() {
 	];
 
 	return (
-		<section className='bg-gray-100 py-8 md:py-12 relative'>
+		<section className='bg-gray-100 mt-16 pt-8 pb-8 md:mt-20 md:pt-12 md:pb-12 relative'>
 			<div className='relative z-10 max-w-7xl mx-auto px-3 md:px-6'>
 				{/* Cards */}
 				<div
