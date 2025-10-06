@@ -111,8 +111,6 @@ const startServer = async () => {
 			console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
 			console.log(`🔧 Server bound to 0.0.0.0:${PORT}`);
 		});
-
-		// Try to initialize database (non-blocking)
 		try {
 			await initializeDatabase();
 			console.log(`📊 Database: PostgreSQL connected`);
