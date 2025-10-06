@@ -10,7 +10,7 @@ import contactRoutes from "./modules/contact/contact.routes";
 import quoteRoutes from "./modules/quote/quote.routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { logger } from "./middleware/logger";
-import { initializeDatabase } from "./config/database";
+import { initializeDatabase, AppDataSource } from "./config/database";
 
 dotenv.config();
 const app = express();
@@ -60,13 +60,16 @@ app.use(logger);
 
 // Health check endpoint
 app.get("/api/health", (_req, res) => {
-	res.status(200).json({
+	const health = {
 		status: "OK",
 		message: "Shahen Backend API is running",
 		timestamp: new Date().toISOString(),
 		environment: process.env.NODE_ENV,
 		version: "1.0.0",
-	});
+		database: AppDataSource.isInitialized ? "connected" : "disconnected"
+	};
+
+	res.status(200).json(health);
 });
 
 // API Routes
@@ -78,14 +81,21 @@ app.use(errorHandler);
 // Initialize database and start server
 const startServer = async () => {
 	try {
-		await initializeDatabase();
-		console.log(`📊 Database: PostgreSQL connected`);
-
-		app.listen(PORT, () => {
+		// Start the server first
+		const server = app.listen(PORT, () => {
 			console.log(`🚀 Server is running on port ${PORT}`);
-			console.log(`� Environment: ${process.env.NODE_ENV}`);
+			console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
 			console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
 		});
+
+		// Try to initialize database (non-blocking)
+		try {
+			await initializeDatabase();
+			console.log(`📊 Database: PostgreSQL connected`);
+		} catch (dbError) {
+			console.warn("⚠️ Database connection failed, but server is running:", dbError);
+			console.log("🔄 Database will retry connection on first API call");
+		}
 	} catch (error) {
 		console.error("❌ Failed to start server:", error);
 		process.exit(1);
