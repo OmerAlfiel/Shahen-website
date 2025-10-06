@@ -14,7 +14,7 @@ import { initializeDatabase, AppDataSource } from "./config/database";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = parseInt(process.env.PORT || "3001", 10);
 
 // Security middleware
 app.use(
@@ -66,7 +66,7 @@ app.get("/api/health", (_req, res) => {
 		timestamp: new Date().toISOString(),
 		environment: process.env.NODE_ENV,
 		version: "1.0.0",
-		database: AppDataSource.isInitialized ? "connected" : "disconnected"
+		database: AppDataSource.isInitialized ? "connected" : "disconnected",
 	};
 
 	res.status(200).json(health);
@@ -93,7 +93,10 @@ const startServer = async () => {
 			await initializeDatabase();
 			console.log(`📊 Database: PostgreSQL connected`);
 		} catch (dbError) {
-			console.warn("⚠️ Database connection failed, but server is running:", dbError);
+			console.warn(
+				"⚠️ Database connection failed, but server is running:",
+				dbError
+			);
 			console.log("🔄 Database will retry connection on first API call");
 		}
 	} catch (error) {
