@@ -27,38 +27,32 @@ export default function ServiceTypes() {
 	];
 
 	return (
-		<section className=' bg-gray-100 py-2 md:py-2 relative overflow-hidden'>
-			<div className='relative z-10'>
-				{/* Download section moved into hero */}
-
+		<section className='bg-gray-100 py-8 md:py-12 relative'>
+			<div className='relative z-10 max-w-7xl mx-auto px-3 md:px-6'>
 				{/* Cards */}
-				<div className='container mx-auto px-1 mt-16 md:mt-20'>
-					<div className='flex flex-nowrap gap-1 md:gap-6 max-w-6xl mx-auto overflow-x-auto'>
-						{items.map((item, idx) => (
-							<AnimatedSection key={idx} animation='slide-up' delay={idx * 150}>
-								<article className='w-[32vw] md:w-auto md:flex-1 h-[350px] md:h-[500px] bg-white shadow-lg overflow-hidden flex flex-col flex-shrink-0'>
-									<div className='w-full overflow-hidden flex justify-center items-center py-1 md:py-6 flex-shrink-0'>
-										<img
-											src={item.img}
-											alt={item.alt}
-											className='w-[90%] md:w-[80%] h-16 md:h-36 object-contain hover:scale-110 transition-transform duration-300 cursor-pointer'
-											loading='lazy'
-										/>
-									</div>
-									<div
-										className='p-1 md:p-6 flex-1 flex flex-col'
-										dir={language === "ar" ? "rtl" : "ltr"}>
-										<h3 className='text-[10px] md:text-xl font-bold text-gray-800 mb-1 md:mb-4 flex-shrink-0 leading-tight'>
-											{item.title}
-										</h3>
-										<p className='text-gray-600 leading-3 md:leading-8 text-[8px] md:text-base flex-1 overflow-hidden'>
-											{item.description}
-										</p>
-									</div>
-								</article>
-							</AnimatedSection>
-						))}
-					</div>
+				<div
+					className='grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3'
+					dir={language === "ar" ? "rtl" : "ltr"}>
+					{items.map((item, idx) => (
+						<AnimatedSection key={idx} animation='slide-up' delay={idx * 150}>
+							<article className='group bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex flex-col h-full p-4 md:p-6'>
+								<div className='flex items-center justify-center mb-4 md:mb-6 h-24 md:h-40 overflow-hidden'>
+									<img
+										src={item.img}
+										alt={item.alt}
+										className='max-h-full max-w-[80%] object-contain transition-transform duration-300 group-hover:scale-105'
+										loading='lazy'
+									/>
+								</div>
+								<h3 className='text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-4 leading-snug text-center md:text-start'>
+									{item.title}
+								</h3>
+								<p className='text-sm md:text-base text-gray-600 leading-relaxed md:leading-7 text-center md:text-start flex-1'>
+									{item.description}
+								</p>
+							</article>
+						</AnimatedSection>
+					))}
 				</div>
 			</div>
 		</section>

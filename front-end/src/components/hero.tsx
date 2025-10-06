@@ -88,7 +88,7 @@ export default function Hero() {
 						: "Transport your goods and cargo wherever you want in an easy and safe way."}
 				</h1>
 
-				<div className='hero-card-wrapper max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8'>
+				<div className='hero-card-wrapper max-w-7xl mx-auto bg-white rounded-2xl shadow-xl border border-[#e4e4e4] p-4 md:p-6 lg:p-8'>
 					{/* Header tabs */}
 					<div className='flex items-center justify-between border-b border-gray-100 pb-3 md:pb-4'>
 						<div
@@ -235,149 +235,215 @@ export default function Hero() {
 						)}
 					</div>
 
-					{/* Steps 2-5 content, shown progressively */}
-					{step >= 2 && (
-						<div className='mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4'>
-							{/* Step 2: Select truck (modal) */}
-							<button
-								disabled={!locationComplete}
-								onClick={() => setTruckModalOpen(true)}
-								className={`h-14 w-full rounded-lg border text-center flex items-center justify-center ${
-									locationComplete
-										? "border-gray-200 bg-[#F5F5F5] hover:border-emerald-300 text-gray-700"
-										: "border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed"
-								}`}>
-								{selectedTruckLabel
-									? selectedTruckLabel
-									: language === "ar"
-									? "اختر الشاحنة"
-									: "Select Truck"}
-							</button>
-
-							{/* Quantity (available after truck selection) */}
+					{/* Steps row appears ONLY after both (all) locations filled */}
+					{locationComplete && (
+						<div
+							className={`hero-order-row mt-4 flex flex-col gap-3 ${
+								language === "ar" ? "rtl" : ""
+							}`}
+							style={{ direction: language === "ar" ? "rtl" : "ltr" }}>
 							<div
-								className={`h-14 w-full rounded-lg border flex items-center justify-center gap-3 ${
-									selectedTruckLabel
-										? "border-gray-200 bg-[#F5F5F5]"
-										: "border-gray-100 bg-gray-50 opacity-60"
+								className={`order-row-inner flex items-stretch gap-2 flex-wrap ${
+									language === "ar" ? "flex-row-reverse" : ""
 								}`}>
-								<button
-									aria-label='increment'
-									onClick={() =>
-										selectedTruckLabel && setQty((q) => Math.min(q + 1, 99))
-									}
-									className='w-9 h-9 rounded-md bg-white border border-emerald-300 text-emerald-600 text-xl leading-none'>
-									+
-								</button>
-								<span className='min-w-8 text-center text-gray-700 font-semibold'>
-									{qty}
-								</span>
-								<button
-									aria-label='decrement'
-									onClick={() =>
-										selectedTruckLabel && setQty((q) => Math.max(q - 1, 1))
-									}
-									className='w-9 h-9 rounded-md bg-white border border-emerald-300 text-emerald-600 text-xl leading-none'>
-									-
-								</button>
+								{/* Order components based on language */}
+								{language === "ar" ? (
+									// RTL order: Insurance | Load | DateTime | Qty | Truck (reversed from LTR)
+									<>
+										<input
+											type='number'
+											disabled={!selectedLoadType}
+											className={`order-field order-field-insurance text-right placeholder-gray-500 flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
+												selectedLoadType ? "" : "disabled"
+											}`}
+											placeholder='أدخل قيمة بضاعتك'
+											value={insuranceValue ?? ""}
+											onChange={(e) => {
+												const v = e.target.value;
+												if (v === "") return setInsuranceValue(undefined);
+												const n = Number(v);
+												if (!isNaN(n)) setInsuranceValue(n);
+											}}
+										/>
+
+										<button
+											disabled={!selectedDateTime}
+											onClick={() => setLoadModalOpen(true)}
+											className={`order-field order-field-load flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
+												selectedDateTime ? "cursor-pointer" : "disabled"
+											}`}>
+											{selectedLoadType
+												? selectedLoadType.loadType
+												: "نوع الحمولة"}
+										</button>
+
+										<button
+											disabled={!selectedTruckLabel}
+											onClick={() => setDateModalOpen(true)}
+											className={`order-field order-field-datetime flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
+												selectedTruckLabel ? "cursor-pointer" : "disabled"
+											}`}>
+											{selectedDateTime
+												? `${selectedDateTime.date.toLocaleDateString("ar-SA", {
+														weekday: "long",
+														month: "long",
+														day: "numeric",
+												  })} ${selectedDateTime.time
+														.replace("AM", "ص")
+														.replace("PM", "م")}`
+												: "تاريخ ووقت"}
+										</button>
+
+										<div
+											className={`order-field order-field-qty flex-shrink-0 w-[120px] sm:w-[140px] h-[50px] md:h-[55px] ${
+												selectedTruckLabel ? "" : "disabled"
+											}`}>
+											<span className='qty-label hidden lg:inline-block text-xs md:text-sm'>
+												عدد الشاحنات
+											</span>
+											<div className='flex items-center gap-1'>
+												<button
+													aria-label='increment'
+													onClick={() =>
+														selectedTruckLabel &&
+														setQty((q) => Math.min(q + 1, 99))
+													}
+													className='qty-btn'>
+													+
+												</button>
+												<span className='qty-value'>{qty}</span>
+												<button
+													aria-label='decrement'
+													onClick={() =>
+														selectedTruckLabel &&
+														setQty((q) => Math.max(q - 1, 1))
+													}
+													className='qty-btn'>
+													-
+												</button>
+											</div>
+										</div>
+
+										<button
+											onClick={() => setTruckModalOpen(true)}
+											className={`order-field order-field-truck whitespace-nowrap flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
+												selectedTruckLabel ? "cursor-pointer" : ""
+											}`}>
+											{selectedTruckLabel ? selectedTruckLabel : "اختر الشاحنة"}
+										</button>
+									</>
+								) : (
+									// LTR order: Truck | Qty | DateTime | Load | Insurance
+									<>
+										<button
+											onClick={() => setTruckModalOpen(true)}
+											className={`order-field order-field-truck whitespace-nowrap flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
+												selectedTruckLabel ? "cursor-pointer" : ""
+											}`}>
+											{selectedTruckLabel ? selectedTruckLabel : "Select Truck"}
+										</button>
+
+										<div
+											className={`order-field order-field-qty flex-shrink-0 w-[120px] sm:w-[140px] h-[50px] md:h-[55px] ${
+												selectedTruckLabel ? "" : "disabled"
+											}`}>
+											<span className='qty-label hidden lg:inline-block'>
+												Qty
+											</span>
+											<div className='flex items-center gap-1'>
+												<button
+													aria-label='decrement'
+													onClick={() =>
+														selectedTruckLabel &&
+														setQty((q) => Math.max(q - 1, 1))
+													}
+													className='qty-btn'>
+													-
+												</button>
+												<span className='qty-value'>{qty}</span>
+												<button
+													aria-label='increment'
+													onClick={() =>
+														selectedTruckLabel &&
+														setQty((q) => Math.min(q + 1, 99))
+													}
+													className='qty-btn'>
+													+
+												</button>
+											</div>
+										</div>
+
+										<button
+											disabled={!selectedTruckLabel}
+											onClick={() => setDateModalOpen(true)}
+											className={`order-field order-field-datetime flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
+												selectedTruckLabel ? "cursor-pointer" : "disabled"
+											}`}>
+											{selectedDateTime
+												? `${selectedDateTime.date.toLocaleDateString(
+														undefined,
+														{
+															weekday: "short",
+															month: "short",
+															day: "numeric",
+														}
+												  )} ${selectedDateTime.time}`
+												: "Date & Time"}
+										</button>
+
+										<button
+											disabled={!selectedDateTime}
+											onClick={() => setLoadModalOpen(true)}
+											className={`order-field order-field-load flex-1 min-w-[100px] sm:min-w-[120px] h-[50px] md:h-[55px] ${
+												selectedDateTime ? "cursor-pointer" : "disabled"
+											}`}>
+											{selectedLoadType
+												? selectedLoadType.loadType
+												: "Load Type"}
+										</button>
+
+										<input
+											type='number'
+											disabled={!selectedLoadType}
+											className={`order-field order-field-insurance text-right placeholder-gray-500 flex-1 min-w-[100px] sm:min-w-[130px] h-[50px] md:h-[55px] ${
+												selectedLoadType ? "" : "disabled"
+											}`}
+											placeholder='Enter your goods value'
+											value={insuranceValue ?? ""}
+											onChange={(e) => {
+												const v = e.target.value;
+												if (v === "") return setInsuranceValue(undefined);
+												const n = Number(v);
+												if (!isNaN(n)) setInsuranceValue(n);
+											}}
+										/>
+									</>
+								)}
 							</div>
 
-							{/* Step 3: Date & Time (modal) */}
-							{step >= 3 && (
+							{/* Get Price */}
+							<div className='mt-4 w-full flex justify-center'>
 								<button
-									disabled={!selectedTruckLabel}
-									onClick={() => setDateModalOpen(true)}
-									className={`h-14 w-full rounded-lg border text-center flex items-center justify-center ${
-										selectedTruckLabel
-											? "border-gray-200 bg-[#F5F5F5] hover:border-emerald-300 text-gray-700"
-											: "border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed"
-									}`}>
-									{selectedDateTime
-										? language === "ar"
-											? `${selectedDateTime.date.toLocaleDateString("ar-SA", {
-													weekday: "long",
-													month: "long",
-													day: "numeric",
-											  })} ${selectedDateTime.time
-													.replace("AM", "ص")
-													.replace("PM", "م")}`
-											: `${selectedDateTime.date.toLocaleDateString(undefined, {
-													weekday: "short",
-													month: "short",
-													day: "numeric",
-											  })} ${selectedDateTime.time}`
-										: language === "ar"
-										? "تاريخ ووقت"
-										: "Date & Time"}
-								</button>
-							)}
-
-							{/* Step 4: Load Type (modal) */}
-							{step >= 4 && (
-								<button
-									disabled={!selectedDateTime}
-									onClick={() => setLoadModalOpen(true)}
-									className={`h-14 w-full rounded-lg border text-center flex items-center justify-center ${
-										selectedDateTime
-											? "border-gray-200 bg-[#F5F5F5] hover:border-emerald-300 text-gray-700"
-											: "border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed"
-									}`}>
-									{selectedLoadType
-										? selectedLoadType.loadType
-										: language === "ar"
-										? "نوع الحمولة"
-										: "Load Type"}
-								</button>
-							)}
-
-							{/* Step 5: Insurance (enabled after load type) */}
-							{step >= 5 && (
-								<input
-									type='number'
-									disabled={!selectedLoadType}
-									className={`md:col-span-2 h-14 w-full rounded-lg border px-4 text-right placeholder-gray-500 ${
-										selectedLoadType
-											? "border-gray-200 bg-[#F5F5F5]"
-											: "border-gray-100 bg-gray-50"
+									disabled={!canGetPrice}
+									className={`get-price-btn-main w-full md:w-auto md:min-w-[240px] font-bold h-[60px] px-10 rounded-lg text-lg shadow-md transition-colors duration-300 ${
+										canGetPrice
+											? "bg-[#018545] hover:bg-[#01763C] text-white"
+											: "bg-gray-300 text-white cursor-not-allowed"
 									}`}
-									placeholder={
-										language === "ar"
-											? "أدخل قيمة بضاعتك"
-											: "Enter your goods value"
-									}
-									value={insuranceValue ?? ""}
-									onChange={(e) => {
-										const v = e.target.value;
-										if (v === "") return setInsuranceValue(undefined);
-										const n = Number(v);
-										if (!isNaN(n)) setInsuranceValue(n);
-									}}
-								/>
-							)}
+									onClick={handleGetPrice}>
+									{loading
+										? language === "ar"
+											? "جاري الحساب..."
+											: "Calculating..."
+										: language === "ar"
+										? "احصل على السعر"
+										: "Get Price"}
+								</button>
+							</div>
 						</div>
 					)}
 
-					{/* Get Price button */}
-					{step >= 5 && (
-						<div className='mt-5 text-center'>
-							<button
-								disabled={!canGetPrice}
-								className={`w-full md:w-auto md:px-12 font-bold py-4 rounded-xl text-lg shadow-lg transition-all duration-300 mx-auto block ${
-									canGetPrice
-										? "bg-[#3BA776] hover:bg-[#35996B] text-white"
-										: "bg-gray-300 text-white cursor-not-allowed"
-								}`}
-								onClick={handleGetPrice}>
-								{loading
-									? language === "ar"
-										? "جاري الحساب..."
-										: "Calculating..."
-									: language === "ar"
-									? "احصل على السعر"
-									: "Get Price"}
-							</button>
-						</div>
-					)}
+					{/* (Legacy Get Price button removed - now included within order row) */}
 
 					{/* Modals */}
 					<TruckPicker
