@@ -67,6 +67,12 @@ app.get("/api/health", (_req, res) => {
 		environment: process.env.NODE_ENV,
 		version: "1.0.0",
 		database: AppDataSource.isInitialized ? "connected" : "disconnected",
+		port: PORT,
+		env_check: {
+			has_db_host: !!process.env.DB_HOST,
+			has_db_password: !!process.env.DB_PASSWORD,
+			has_database_url: !!process.env.DATABASE_URL
+		}
 	};
 
 	res.status(200).json(health);
