@@ -127,6 +127,24 @@ export const initializeDatabase = async (
 			if (process.env.NODE_ENV === "development") {
 				console.log("🔄 Database synchronized in development mode");
 			}
+			// In production (or any non-dev) run pending migrations (idempotent)
+			if (process.env.NODE_ENV !== "development") {
+				try {
+					const hadPending = await AppDataSource.showMigrations();
+					const executed = await AppDataSource.runMigrations();
+					if (hadPending) {
+						console.log(`📦 Executed ${executed.length} migration(s).`);
+						executed.forEach((m) => console.log(`   ▶ ${m.name}`));
+					} else {
+						console.log("✅ No pending migrations – schema up to date.");
+					}
+				} catch (mErr) {
+					console.error(
+						"⚠️ Migration execution failed (continuing – app may have outdated schema):",
+						mErr
+					);
+				}
+			}
 			return;
 		} catch (error: any) {
 			console.error(
