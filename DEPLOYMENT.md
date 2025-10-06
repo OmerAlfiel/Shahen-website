@@ -1,11 +1,11 @@
 # 🚀 Shahen Logistics - Production Deployment Guide
 
-This guide will walk you through deploying the Shahen Logistics website manually using modern hosting platforms.
+This guide provides **complete manual deployment steps** for the Shahen Logistics website using modern hosting platforms (no Docker required).
 
 ## 📋 Project Overview
 
-- **Frontend**: React.js application
-- **Backend**: Node.js with TypeScript and Express
+- **Frontend**: React.js + TypeScript + Tailwind CSS
+- **Backend**: Node.js + Express + TypeORM
 - **Database**: PostgreSQL
 - **Architecture**: Monorepo structure
 
@@ -13,7 +13,7 @@ This guide will walk you through deploying the Shahen Logistics website manually
 
 - Node.js 18+ installed locally
 - Git installed
-- Accounts on hosting platforms (Railway, Vercel, etc.)
+- GitHub account with repository
 - Domain name (optional but recommended)
 
 ## 📁 Project Structure
@@ -28,107 +28,534 @@ Shahen-website/
 └── DEPLOYMENT.md          # This file
 ```
 
-## 🚀 Deployment Options
+---
 
-### Option 1: Railway (Recommended for Backend) + Vercel (Frontend)
+## 🚀 DEPLOYMENT OPTIONS
 
-#### **Step 1: Database Setup on Railway**
+### Option 1: Railway (Recommended - Easiest Setup)
 
-1. Go to [Railway.app](https://railway.app)
-2. Sign up/Login with GitHub
-3. Create a new project
-4. Add PostgreSQL database:
-   - Click "Deploy from template"
-   - Search for "PostgreSQL"
-   - Click deploy
-5. Note down database credentials from Variables tab:
-   - `DATABASE_URL`
+**Why Railway?**
+
+- ✅ Free tier with generous limits
+- ✅ Built-in PostgreSQL database
+- ✅ Automatic deployments from GitHub
+- ✅ Simple environment variable management
+- ✅ Custom domain support
+
+#### **Complete Railway Deployment Steps**
+
+##### 1. Prepare Your Code
+
+```bash
+# Make sure your code is committed and pushed
+git add .
+git commit -m "Ready for production deployment"
+git push origin main
+```
+
+##### 2. Create Railway Account & Project
+
+1. Visit [railway.app](https://railway.app)
+2. Sign up with your **GitHub account**
+3. Click **"New Project"**
+4. Select **"Deploy from GitHub repo"**
+5. Choose your **"Shahen-website"** repository
+
+##### 3. Deploy PostgreSQL Database
+
+1. In your Railway project dashboard, click **"+ New"**
+2. Select **"Database"** → **"PostgreSQL"**
+3. Railway automatically creates database with these variables:
    - `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`
+   - `DATABASE_URL`
 
-#### **Step 2: Backend Deployment on Railway**
+##### 4. Deploy Backend Service
 
-1. In the same Railway project, click "New Service"
-2. Connect your GitHub repository
-3. Select the `apps/back-end` directory as root
-4. Set environment variables in Railway dashboard:
+1. Click **"+ New"** → **"GitHub Repo"**
+2. Select your repository again
+3. Railway will detect multiple services, select or configure:
+   - **Service Name**: `shahen-backend`
+   - **Root Directory**: `apps/back-end`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+
+##### 5. Configure Backend Environment Variables
+
+Go to Backend Service → **Variables** tab, add these:
 
 ```env
 NODE_ENV=production
-PORT=3001
-DB_HOST=[from railway db]
-DB_PORT=5432
-DB_USERNAME=[from railway db]
-DB_PASSWORD=[from railway db]
-DB_NAME=[from railway db]
-FRONTEND_URL=https://yourdomain.vercel.app
-JWT_SECRET=your-super-secure-jwt-secret-min-32-chars
-SESSION_SECRET=your-super-secure-session-secret
+PORT=$PORT
+FRONTEND_URL=https://your-frontend-name.railway.app
+DB_HOST=$PGHOST
+DB_PORT=$PGPORT
+DB_USERNAME=$PGUSER
+DB_PASSWORD=$PGPASSWORD
+DB_NAME=$PGDATABASE
+DATABASE_URL=$DATABASE_URL
+JWT_SECRET=your-very-secure-jwt-secret-at-least-32-characters-long-make-it-random
+SESSION_SECRET=your-secure-session-secret-also-very-long-and-random
+DB_SSL=true
 RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX=100
 LOG_LEVEL=error
 ```
 
-5. Railway will automatically deploy when you push to main branch
-6. Note your backend URL: `https://yourapp-production-xxxx.up.railway.app`
+##### 6. Deploy Frontend Service
 
-#### **Step 3: Frontend Deployment on Vercel**
+1. Click **"+ New"** → **"GitHub Repo"**
+2. Select your repository again
+3. Configure:
+   - **Service Name**: `shahen-frontend`
+   - **Root Directory**: `apps/front-end`
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npx serve -s build -l $PORT`
 
-1. Go to [Vercel.com](https://vercel.com)
-2. Sign up/Login with GitHub
-3. Import your repository
-4. Set Root Directory to `apps/front-end`
-5. Set environment variables:
+##### 7. Configure Frontend Environment Variables
+
+Go to Frontend Service → **Variables** tab, add these:
 
 ```env
-REACT_APP_API_BASE_URL=https://yourapp-production-xxxx.up.railway.app/api
+REACT_APP_API_BASE_URL=https://your-backend-name.railway.app/api
 REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoiaXNtYWVpbC1zaGFqYXIiLCJhIjoiY202ODlsdjNtMDl6ZDJqc2RoOGl3eHp6bCJ9.cLGG1N6svL5MVckGUvqcig
 NODE_ENV=production
 GENERATE_SOURCEMAP=false
 ```
 
-6. Deploy and note your frontend URL: `https://yourapp.vercel.app`
+##### 8. Update Cross-Service URLs
 
-### Option 2: Render (Full Stack)
+1. After both services deploy, note their URLs:
+   - Backend: `https://shahen-backend-production-xxx.up.railway.app`
+   - Frontend: `https://shahen-frontend-production-xxx.up.railway.app`
+2. **Update backend** `FRONTEND_URL` with the frontend URL
+3. **Update frontend** `REACT_APP_API_BASE_URL` with backend URL + `/api`
+4. **Wait for automatic redeployment**
 
-#### **Step 1: Database Setup**
+##### 9. Test Your Deployment
 
-1. Go to [Render.com](https://render.com)
-2. Create PostgreSQL database
-3. Note connection details
+- Visit your frontend URL
+- Test contact form submission
+- Test quote request functionality
+- Check browser console for errors
+- Visit `/api/health` endpoint on backend
 
-#### **Step 2: Backend Service**
+---
 
-1. Create new Web Service
-2. Connect GitHub repo
-3. Set:
+### Option 2: Vercel (Frontend) + Railway (Backend)
+
+**Best for**: Optimal frontend performance with Vercel's global CDN
+
+#### **Step 1: Deploy Backend to Railway**
+
+Follow Railway steps 1-5 above for backend and database only.
+
+#### **Step 2: Deploy Frontend to Vercel**
+
+##### 1. Create Vercel Account
+
+1. Visit [vercel.com](https://vercel.com)
+2. Sign up with your **GitHub account**
+
+##### 2. Import Project
+
+1. Click **"New Project"**
+2. **"Import Git Repository"**
+3. Select your **"Shahen-website"** repository
+
+##### 3. Configure Build Settings
+
+```
+Framework Preset: Create React App
+Root Directory: apps/front-end
+Build Command: npm run build
+Output Directory: build
+Install Command: npm install
+```
+
+##### 4. Add Environment Variables
+
+```env
+REACT_APP_API_BASE_URL=https://your-backend.railway.app/api
+REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoiaXNtYWVpbC1zaGFqYXIiLCJhIjoiY202ODlsdjNtMDl6ZDJqc2RoOGl3eHp6bCJ9.cLGG1N6svL5MVckGUvqcig
+NODE_ENV=production
+GENERATE_SOURCEMAP=false
+```
+
+##### 5. Deploy & Update Backend
+
+1. Deploy on Vercel
+2. Note your Vercel URL: `https://shahen-website.vercel.app`
+3. Update Railway backend `FRONTEND_URL` with your Vercel URL
+
+---
+
+### Option 3: Render (Alternative Full-Stack)
+
+#### **Step 1: Create Database**
+
+1. Visit [render.com](https://render.com) and sign up
+2. Click **"New"** → **"PostgreSQL"**
+3. Choose **Free tier**
+4. Note connection details from dashboard
+
+#### **Step 2: Deploy Backend**
+
+1. Click **"New"** → **"Web Service"**
+2. Connect your GitHub repository
+3. Configure:
+
    - **Root Directory**: `apps/back-end`
    - **Build Command**: `npm install && npm run build`
    - **Start Command**: `npm start`
-4. Add environment variables (same as Railway above)
+   - **Environment**: Node.js
 
-#### **Step 3: Frontend Service**
+4. Add environment variables:
 
-1. Create new Static Site
-2. Connect GitHub repo
-3. Set:
+```env
+NODE_ENV=production
+DATABASE_URL=postgresql://user:password@host:port/database
+FRONTEND_URL=https://your-frontend.onrender.com
+JWT_SECRET=your-jwt-secret
+SESSION_SECRET=your-session-secret
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=100
+LOG_LEVEL=error
+```
+
+#### **Step 3: Deploy Frontend**
+
+1. Click **"New"** → **"Static Site"**
+2. Connect your GitHub repository
+3. Configure:
+
    - **Root Directory**: `apps/front-end`
    - **Build Command**: `npm install && npm run build`
    - **Publish Directory**: `build`
 
-### Option 3: DigitalOcean App Platform
+4. Add environment variables:
 
-#### **Step 1: Create App**
+```env
+REACT_APP_API_BASE_URL=https://your-backend.onrender.com/api
+REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoiaXNtYWVpbC1zaGFqYXIiLCJhIjoiY202ODlsdjNtMDl6ZDJqc2RoOGl3eHp6bCJ9.cLGG1N6svL5MVckGUvqcig
+NODE_ENV=production
+```
 
-1. Go to DigitalOcean Apps
-2. Create new app from GitHub
-3. Add two components:
-   - Web Service (backend): `apps/back-end`
-   - Static Site (frontend): `apps/front-end`
+---
 
-#### **Step 2: Database**
+### Option 4: DigitalOcean App Platform
 
-1. Add managed PostgreSQL database
-2. Connect to backend service
+#### **Complete Setup**
+
+1. Visit [DigitalOcean Apps](https://cloud.digitalocean.com/apps)
+2. Create account and **"Create App"**
+3. Connect GitHub repository
+4. Configure **two components**:
+
+**Backend Component:**
+
+```
+Type: Web Service
+Source Directory: apps/back-end
+Build Command: npm install && npm run build
+Run Command: npm start
+Environment Variables: [same as above options]
+```
+
+**Frontend Component:**
+
+```
+Type: Static Site
+Source Directory: apps/front-end
+Build Command: npm install && npm run build
+Output Directory: build
+Environment Variables: [same as frontend above]
+```
+
+5. Add **managed PostgreSQL database**
+6. Connect database to backend component
+
+---
+
+## 🔧 PRE-DEPLOYMENT PREPARATION
+
+### **1. Backend Package.json Check**
+
+Ensure `apps/back-end/package.json` has these scripts:
+
+```json
+{
+	"scripts": {
+		"start": "node dist/index.js",
+		"build": "tsc",
+		"dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+	}
+}
+```
+
+### **2. Frontend Package.json Check**
+
+Ensure `apps/front-end/package.json` has these scripts:
+
+```json
+{
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test"
+	}
+}
+```
+
+### **3. Environment Files Setup**
+
+**Backend** (`apps/back-end/.env.production`):
+
+```env
+NODE_ENV=production
+PORT=3001
+FRONTEND_URL=[will-be-set-during-deployment]
+DB_HOST=[will-be-provided-by-platform]
+DB_PORT=5432
+DB_USERNAME=[will-be-provided-by-platform]
+DB_PASSWORD=[will-be-provided-by-platform]
+DB_NAME=[will-be-provided-by-platform]
+JWT_SECRET=[generate-32-plus-character-secret]
+SESSION_SECRET=[generate-32-plus-character-secret]
+DB_SSL=true
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=100
+LOG_LEVEL=error
+```
+
+**Frontend** (`apps/front-end/.env.production`):
+
+```env
+REACT_APP_API_BASE_URL=[will-be-set-during-deployment]
+REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoiaXNtYWVpbC1zaGFqYXIiLCJhIjoiY202ODlsdjNtMDl6ZDJqc2RoOGl3eHp6bCJ9.cLGG1N6svL5MVckGUvqcig
+NODE_ENV=production
+GENERATE_SOURCEMAP=false
+```
+
+---
+
+## 🧪 LOCAL TESTING BEFORE DEPLOYMENT
+
+### **Test Backend**
+
+```bash
+cd apps/back-end
+npm install
+npm run build
+npm start
+# Should see: "🚀 Server is running on port 3001"
+```
+
+### **Test Frontend**
+
+```bash
+cd apps/front-end
+npm install
+npm run build
+npx serve -s build -l 3000
+# Should open in browser successfully
+```
+
+---
+
+## ✅ POST-DEPLOYMENT VERIFICATION
+
+### **1. Health Checks**
+
+- **Backend Health**: `https://your-backend-url/api/health`
+  - Should return: `{"status":"OK","message":"Shahen Backend API is running"}`
+- **Frontend Load**: `https://your-frontend-url`
+  - Should load without console errors
+
+### **2. Functionality Tests**
+
+- [ ] Contact form submission works
+- [ ] Quote request form works
+- [ ] All pages load correctly
+- [ ] Mobile responsive design works
+- [ ] Map integration works (if used)
+
+### **3. Performance Checks**
+
+- [ ] Page load time < 3 seconds
+- [ ] API response time < 1 second
+- [ ] No JavaScript errors in console
+- [ ] All images and assets load
+
+---
+
+## 🔐 SECURITY CONFIGURATION
+
+### **Environment Variables Security**
+
+- [ ] Strong JWT secrets (32+ characters)
+- [ ] Strong session secrets (32+ characters)
+- [ ] Database passwords are secure
+- [ ] No secrets in code or Git history
+
+### **Application Security**
+
+- [ ] HTTPS enabled on both services
+- [ ] CORS configured for production domains only
+- [ ] Rate limiting enabled
+- [ ] Security headers configured (helmet.js)
+
+---
+
+## 🌐 CUSTOM DOMAIN SETUP (Optional)
+
+### **1. Purchase Domain**
+
+Recommended registrars:
+
+- Namecheap
+- GoDaddy
+- Cloudflare
+- Google Domains
+
+### **2. Configure DNS**
+
+```
+Type: CNAME
+Name: www
+Value: your-app.railway.app (or platform URL)
+
+Type: A
+Name: @
+Value: [Check platform documentation for IP]
+```
+
+### **3. Add to Platform**
+
+- **Railway**: Settings → Domains → Add Custom Domain
+- **Vercel**: Project Settings → Domains
+- **Render**: Settings → Custom Domains
+
+---
+
+## 🐛 TROUBLESHOOTING GUIDE
+
+### **Common Issues & Solutions**
+
+#### **Build Failures**
+
+```bash
+# Check Node.js version (should be 18+)
+node --version
+
+# Clear npm cache
+npm cache clean --force
+
+# Check for missing dependencies
+npm audit fix
+```
+
+#### **Database Connection Issues**
+
+- Verify database URL format
+- Check if SSL is required (`DB_SSL=true`)
+- Ensure database is running and accessible
+
+#### **CORS Errors**
+
+- Check `FRONTEND_URL` in backend environment
+- Verify URLs match exactly (https vs http)
+- Ensure no trailing slashes
+
+#### **Environment Variable Issues**
+
+- Variable names are case-sensitive
+- Restart services after changes
+- Check platform-specific variable formats
+
+### **Debug Commands**
+
+```bash
+# Test API endpoint
+curl https://your-backend-url/api/health
+
+# Check if frontend build works locally
+cd apps/front-end && npm run build
+
+# Verify environment variables are loaded
+# Check platform logs/dashboard
+```
+
+---
+
+## 📊 MONITORING & MAINTENANCE
+
+### **Application Monitoring**
+
+- **Health Endpoint**: `/api/health` returns app status
+- **Error Logging**: Check platform logs for errors
+- **Performance**: Monitor response times
+- **Database**: Monitor connection pool and queries
+
+### **Backup Strategy**
+
+- **Railway**: Automatic database backups
+- **Render**: Configure backup schedule in dashboard
+- **Manual**: Set up weekly database dumps
+
+### **Update Process**
+
+1. Test changes locally
+2. Push to GitHub main branch
+3. Platform auto-deploys from GitHub
+4. Verify deployment successful
+5. Run post-deployment tests
+
+---
+
+## 🚀 QUICK DEPLOYMENT SUMMARY
+
+### **Fastest Route (Railway):**
+
+1. **Sign up**: [railway.app](https://railway.app) with GitHub
+2. **Create project** from your repository
+3. **Add PostgreSQL** database
+4. **Deploy backend** service (apps/back-end)
+5. **Deploy frontend** service (apps/front-end)
+6. **Configure environment variables**
+7. **Test functionality**
+
+**Total Time**: ~15-30 minutes
+**Cost**: Free tier available
+
+---
+
+## 🆘 GETTING HELP
+
+If you encounter issues:
+
+1. **Check this documentation** first
+2. **Review platform logs** in dashboard
+3. **Test locally** to isolate issues
+4. **Verify environment variables** are correct
+5. **Check platform status pages** for outages
+6. **Use platform support** forums/documentation
+
+---
+
+## 📞 QUICK REFERENCE LINKS
+
+- [Railway Documentation](https://docs.railway.app)
+- [Vercel Documentation](https://vercel.com/docs)
+- [Render Documentation](https://render.com/docs)
+- [DigitalOcean Apps](https://docs.digitalocean.com/products/app-platform)
+
+**Your Shahen Logistics website will be live and production-ready! 🎉**
+
+---
+
+### **Need the deployment script?**
+
+Run: `bash deployment/scripts/deploy.sh` for interactive deployment guide
 
 ## 🔧 Pre-Deployment Setup
 
