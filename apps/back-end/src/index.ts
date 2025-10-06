@@ -65,7 +65,8 @@ const allowedOrigins = [
 	"http://localhost:3000",
 	"http://localhost:5173",
 	"http://localhost:3001", // Allow same origin
-	"https://shahen-website.vercel.app",
+	"https://shahen-website.vercel.app", // Vercel frontend
+	"https://shahen-website-production.up.railway.app", // Railway backend (for same-origin)
 	// Add environment-specific origins if available
 	...(process.env.CORS_ORIGINS
 		? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
@@ -152,7 +153,8 @@ app.use((req, res, next) => {
 		"http://localhost:3000",
 		"http://localhost:5173",
 		"http://localhost:3001",
-		"https://shahen-website.vercel.app",
+		"https://shahen-website.vercel.app", // Vercel frontend
+		"https://shahen-website-production.up.railway.app", // Railway backend
 	];
 
 	// Check if origin is allowed or matches Vercel pattern
