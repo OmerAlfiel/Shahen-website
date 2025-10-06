@@ -2,10 +2,6 @@
 	"name": "shahen-logistics",
 	"version": "1.0.0",
 	"private": true,
-	"workspaces": [
-		"apps/front-end",
-		"apps/back-end"
-	],
 	"scripts": {
 		"dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
 		"dev:frontend": "cd apps/front-end && npm start",

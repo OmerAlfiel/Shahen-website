@@ -18,7 +18,9 @@ const PORT = parseInt(process.env.PORT || "3001", 10);
 
 // Validate PORT
 if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
-	console.error(`❌ Invalid PORT: ${process.env.PORT}. Must be an integer between 1 and 65535`);
+	console.error(
+		`❌ Invalid PORT: ${process.env.PORT}. Must be an integer between 1 and 65535`
+	);
 	process.exit(1);
 }
 
@@ -26,8 +28,10 @@ console.log(`🔧 Starting with PORT: ${PORT} (type: ${typeof PORT})`);
 console.log(`🔧 Environment variables check:`);
 console.log(`   - NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`   - PORT: ${process.env.PORT}`);
-console.log(`   - DB_HOST: ${process.env.DB_HOST ? 'SET' : 'NOT SET'}`);
-console.log(`   - DATABASE_URL: ${process.env.DATABASE_URL ? 'SET' : 'NOT SET'}`);
+console.log(`   - DB_HOST: ${process.env.DB_HOST ? "SET" : "NOT SET"}`);
+console.log(
+	`   - DATABASE_URL: ${process.env.DATABASE_URL ? "SET" : "NOT SET"}`
+);
 
 // Security middleware
 app.use(
