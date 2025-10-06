@@ -69,15 +69,15 @@ const defaultOrigins = [
 ];
 const envOrigins = (process.env.CORS_ORIGINS || "")
 	.split(",")
-	.map((o) => o.trim())
+	.map((o) => o.trim().replace(/\/+$/g, "")) // strip trailing slashes
 	.filter(Boolean);
 
 const staticAllowedOrigins = Array.from(
 	new Set(
 		[
 			...(envOrigins.length ? envOrigins : []),
-			process.env.FRONTEND_URL || "",
-			...defaultOrigins,
+			(process.env.FRONTEND_URL || "").replace(/\/+$/g, ""),
+			...defaultOrigins.map((o) => o.replace(/\/+$/g, "")),
 		].filter(Boolean)
 	)
 );
@@ -190,7 +190,16 @@ app.use(errorHandler);
 // Initialize database and start server
 const startServer = async () => {
 	try {
-		// Start the server first - bind to 0.0.0.0 for Railway
+		const server = app.listen(PORT, "0.0.0.0", () => {
+			console.log(`🚀 Server listening on 0.0.0.0:${PORT}`);
+			console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+			console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL}`);
+		});
+		server.on("error", (err) => {
+			console.error("❌ Server failed to bind to port:", err);
+			process.exit(1);
+		});
+
 		try {
 			await initializeDatabase();
 			console.log(`📊 Database: PostgreSQL connected`);
