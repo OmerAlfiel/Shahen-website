@@ -93,7 +93,10 @@ export const AppDataSource = new DataSource({
 	synchronize: process.env.NODE_ENV === "development",
 	logging: process.env.NODE_ENV === "development",
 	entities: [Contact],
-	migrations: ["dist/migrations/*.js"],
+	migrations:
+		process.env.NODE_ENV === "development"
+			? ["src/migrations/*.ts"]
+			: ["dist/migrations/*.js"],
 	ssl:
 		process.env.NODE_ENV === "production"
 			? { rejectUnauthorized: false }
@@ -111,7 +114,7 @@ export const AppDataSource = new DataSource({
  * hiccups (common on first container start) don't permanently fail boot.
  */
 export const initializeDatabase = async (
-	retries = 3,
+	retries = 4,
 	delayMs = 3000
 ): Promise<void> => {
 	if (AppDataSource.isInitialized) return; // Already ready
@@ -157,5 +160,15 @@ export const initializeDatabase = async (
 			}
 			await new Promise((res) => setTimeout(res, delayMs));
 		}
+	}
+};
+
+/**
+ * Ensure database is initialized before any database operations
+ */
+export const ensureDbInitialized = async (): Promise<void> => {
+	if (!AppDataSource.isInitialized) {
+		console.log("🔄 Database not initialized, attempting connection...");
+		await initializeDatabase();
 	}
 };

@@ -1,17 +1,22 @@
 import { Repository } from "typeorm";
-import { AppDataSource } from "../config/database";
+import { AppDataSource, ensureDbInitialized } from "../config/database";
 import { Contact, ContactStatus } from "../entities/Contact";
 
 export class ContactRepository {
-	private repository: Repository<Contact>;
+	private repository: Repository<Contact> | null = null;
 
-	constructor() {
-		this.repository = AppDataSource.getRepository(Contact);
+	private async getRepository(): Promise<Repository<Contact>> {
+		if (!this.repository) {
+			await ensureDbInitialized();
+			this.repository = AppDataSource.getRepository(Contact);
+		}
+		return this.repository;
 	}
 
 	async create(contactData: Partial<Contact>): Promise<Contact> {
-		const contact = this.repository.create(contactData);
-		return await this.repository.save(contact);
+		const repository = await this.getRepository();
+		const contact = repository.create(contactData);
+		return await repository.save(contact);
 	}
 
 	async findAll(options?: {
@@ -21,7 +26,8 @@ export class ContactRepository {
 		sortBy?: keyof Contact;
 		sortOrder?: "ASC" | "DESC";
 	}): Promise<{ contacts: Contact[]; total: number }> {
-		const queryBuilder = this.repository.createQueryBuilder("contact");
+		const repository = await this.getRepository();
+		const queryBuilder = repository.createQueryBuilder("contact");
 
 		if (options?.status) {
 			queryBuilder.where("contact.status = :status", {
@@ -47,7 +53,8 @@ export class ContactRepository {
 	}
 
 	async findById(id: string): Promise<Contact | null> {
-		return await this.repository.findOne({ where: { id } });
+		const repository = await this.getRepository();
+		return await repository.findOne({ where: { id } });
 	}
 
 	async updateStatus(
@@ -55,6 +62,7 @@ export class ContactRepository {
 		status: ContactStatus,
 		adminNotes?: string
 	): Promise<Contact | null> {
+		const repository = await this.getRepository();
 		const contact = await this.findById(id);
 		if (!contact) {
 			return null;
@@ -65,11 +73,12 @@ export class ContactRepository {
 			contact.adminNotes = adminNotes;
 		}
 
-		return await this.repository.save(contact);
+		return await repository.save(contact);
 	}
 
 	async delete(id: string): Promise<boolean> {
-		const result = await this.repository.delete(id);
+		const repository = await this.getRepository();
+		const result = await repository.delete(id);
 		return result.affected !== 0;
 	}
 
@@ -80,19 +89,20 @@ export class ContactRepository {
 		replied: number;
 		todayCount: number;
 	}> {
-		const total = await this.repository.count();
-		const pending = await this.repository.count({
+		const repository = await this.getRepository();
+		const total = await repository.count();
+		const pending = await repository.count({
 			where: { status: ContactStatus.PENDING },
 		});
-		const processed = await this.repository.count({
+		const processed = await repository.count({
 			where: { status: ContactStatus.PROCESSED },
 		});
-		const replied = await this.repository.count({
+		const replied = await repository.count({
 			where: { status: ContactStatus.REPLIED },
 		});
 
 		// Count today's submissions using PostgreSQL date functions
-		const todayCount = await this.repository
+		const todayCount = await repository
 			.createQueryBuilder("contact")
 			.where("DATE(contact.createdAt) = CURRENT_DATE")
 			.getCount();
@@ -107,7 +117,8 @@ export class ContactRepository {
 			offset?: number;
 		}
 	): Promise<{ contacts: Contact[]; total: number }> {
-		const queryBuilder = this.repository.createQueryBuilder("contact");
+		const repository = await this.getRepository();
+		const queryBuilder = repository.createQueryBuilder("contact");
 
 		queryBuilder.where(
 			"contact.name ILIKE :searchTerm OR contact.message ILIKE :searchTerm",

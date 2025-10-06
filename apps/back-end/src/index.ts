@@ -60,103 +60,131 @@ app.use(limiter);
 app.use(compression());
 
 // ---------- CORS Configuration ----------
-// Allow multiple origins via CORS_ORIGINS (comma separated) or fallback to FRONTEND_URL
-// Defaults include localhost and the known production domain.
-const defaultOrigins = [
+// Simplified and more reliable CORS setup
+const allowedOrigins = [
 	"http://localhost:3000",
 	"http://localhost:5173",
+	"http://localhost:3001", // Allow same origin
 	"https://shahen-website.vercel.app",
-];
-const envOrigins = (process.env.CORS_ORIGINS || "")
-	.split(",")
-	.map((o) => o.trim().replace(/\/+$/g, "")) // strip trailing slashes
-	.filter(Boolean);
+	// Add environment-specific origins if available
+	...(process.env.CORS_ORIGINS
+		? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
+		: []),
+	...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL.trim()] : []),
+].filter(Boolean);
 
-const staticAllowedOrigins = Array.from(
-	new Set(
-		[
-			...(envOrigins.length ? envOrigins : []),
-			(process.env.FRONTEND_URL || "").replace(/\/+$/g, ""),
-			...defaultOrigins.map((o) => o.replace(/\/+$/g, "")),
-		].filter(Boolean)
-	)
-);
+// Add Vercel preview deployments pattern
+const vercelPattern = /^https:\/\/[a-z0-9-]+-.*\.vercel\.app$/i;
 
-// Optional regex patterns (e.g., all vercel preview deployments)
-const originPatterns: RegExp[] = [/^https?:\/\/[a-z0-9-]+-.*\.vercel\.app$/i];
-
-console.log("🌐 CORS allowed origins:", staticAllowedOrigins);
-
-// Helper to log detailed CORS decision making (only in non-production to reduce noise)
-const logCors = (msg: string): void => {
-	if (process.env.NODE_ENV !== "production") {
-		console.log(msg);
-	}
-};
+console.log("🌐 CORS allowed origins:", allowedOrigins);
 
 const corsOptions: CorsOptions = {
 	origin: (origin, callback) => {
+		// Allow requests with no origin (mobile apps, curl, etc.)
 		if (!origin) {
-			// Non-browser or same-origin (like curl / server-to-server)
-			logCors("CORS: allowing request with no origin header (non-browser)");
+			console.log("CORS: ✅ Allowing request with no origin header");
 			return callback(null, true);
 		}
 
-		const matchedStatic = staticAllowedOrigins.includes(origin);
-		const matchedPattern = originPatterns.some((r) => r.test(origin));
-
-		if (matchedStatic || matchedPattern) {
-			logCors(
-				`CORS: ✅ allowed origin: ${origin} (${
-					matchedStatic ? "static" : "pattern"
-				})`
-			);
+		// Check if origin is in allowed list
+		if (allowedOrigins.includes(origin)) {
+			console.log(`CORS: ✅ Allowed origin: ${origin}`);
 			return callback(null, true);
 		}
 
-		logCors(`CORS: ❌ blocked origin: ${origin}`);
-		return callback(new Error("Not allowed by CORS"));
+		// Check if origin matches Vercel pattern
+		if (vercelPattern.test(origin)) {
+			console.log(`CORS: ✅ Allowed Vercel origin: ${origin}`);
+			return callback(null, true);
+		}
+
+		console.log(`CORS: ❌ Blocked origin: ${origin}`);
+		return callback(new Error(`Origin ${origin} not allowed by CORS`));
 	},
 	credentials: true,
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-	// Let the cors library reflect requested headers automatically by omitting allowedHeaders.
-	exposedHeaders: ["Content-Length"],
-	maxAge: 600,
-	optionsSuccessStatus: 204,
+	allowedHeaders: [
+		"Content-Type",
+		"Authorization",
+		"X-Requested-With",
+		"Accept",
+		"Origin",
+	],
+	exposedHeaders: ["Content-Length", "X-Total-Count"],
+	maxAge: 86400, // 24 hours
+	optionsSuccessStatus: 200,
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
 
-// Put CORS & preflight handling as early as possible
+// Log preflight requests for debugging
 app.use((req, res, next) => {
 	if (req.method === "OPTIONS") {
-		// For debugging preflight issues, log requested headers & method
-		logCors(
-			`Preflight -> Origin: ${req.headers.origin} | Request-Method: ${req.headers["access-control-request-method"]} | Request-Headers: ${req.headers["access-control-request-headers"]}`
+		console.log(
+			`CORS Preflight: Origin=${req.headers.origin}, Method=${req.headers["access-control-request-method"]}, Headers=${req.headers["access-control-request-headers"]}`
 		);
 	}
 	next();
 });
-app.options("*", cors(corsOptions));
 
-// Debug endpoint to verify what the server thinks the allowed origins are (avoid leaking in prod)
+// Debug endpoint to check CORS configuration
 app.get("/api/debug/cors", (req, res): void => {
 	if (process.env.NODE_ENV === "production" && !process.env.ENABLE_CORS_DEBUG) {
 		res.status(403).json({ message: "CORS debug disabled in production" });
 		return;
 	}
 	res.json({
-		staticAllowedOrigins,
-		originPatterns: originPatterns.map((r) => r.toString()),
+		allowedOrigins,
 		requestOrigin: req.headers.origin,
 		nodeEnv: process.env.NODE_ENV,
+		vercelPattern: vercelPattern.toString(),
 	});
 });
-// Explicitly handle OPTIONS in case some proxies strip automatic handling
-app.options("*", cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// Fallback CORS headers middleware (as backup)
+app.use((req, res, next) => {
+	const origin = req.headers.origin;
+	const allowedOrigins = [
+		"http://localhost:3000",
+		"http://localhost:5173",
+		"http://localhost:3001",
+		"https://shahen-website.vercel.app",
+	];
+
+	// Check if origin is allowed or matches Vercel pattern
+	if (
+		!origin ||
+		allowedOrigins.includes(origin) ||
+		/^https:\/\/[a-z0-9-]+-.*\.vercel\.app$/i.test(origin)
+	) {
+		res.header("Access-Control-Allow-Origin", origin || "*");
+		res.header("Access-Control-Allow-Credentials", "true");
+		res.header(
+			"Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE, OPTIONS"
+		);
+		res.header(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization, X-Requested-With, Accept, Origin"
+		);
+		res.header(
+			"Access-Control-Expose-Headers",
+			"Content-Length, X-Total-Count"
+		);
+	}
+
+	// Handle preflight requests
+	if (req.method === "OPTIONS") {
+		res.status(200).end();
+		return;
+	}
+
+	next();
+});
 
 // Custom middleware
 app.use(logger);
