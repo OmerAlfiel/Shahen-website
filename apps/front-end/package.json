@@ -1,14 +1,12 @@
 {
-	"name": "shahen-react-app",
+	"name": "shahen-nextjs-app",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": ".",
 	"scripts": {
-		"start": "react-scripts start",
-		"build": "react-scripts build",
-		"build:prod": "NODE_ENV=production react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.10.0",
@@ -49,47 +47,27 @@
 		"input-otp": "1.4.1",
 		"lucide-react": "^0.454.0",
 		"mapbox-gl": "latest",
+		"next": "^14.2.0",
 		"react": "^18.2.0",
 		"react-day-picker": "9.8.0",
 		"react-dom": "^18.2.0",
 		"react-hook-form": "^7.60.0",
 		"react-resizable-panels": "^2.1.7",
-		"react-router-dom": "^6.26.2",
-		"react-scripts": "5.0.1",
 		"recharts": "2.15.4",
-		"serve": "^14.2.3",
 		"sonner": "^1.7.4",
 		"tailwind-merge": "^2.5.5",
 		"tailwindcss-animate": "^1.0.7",
 		"vaul": "^0.9.9",
-		"web-vitals": "^3.5.0",
 		"zod": "3.25.67"
 	},
 	"devDependencies": {
 		"@types/node": "^22",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
-		"ajv": "^8.17.1",
+		"eslint": "^8",
+		"eslint-config-next": "^14.2.0",
 		"postcss": "^8.5",
 		"tailwindcss": "^3.4.13",
-		"typescript": "^4.9.5"
-	},
-	"eslintConfig": {
-		"extends": [
-			"react-app",
-			"react-app/jest"
-		]
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
+		"typescript": "^5.3.0"
 	}
 }
