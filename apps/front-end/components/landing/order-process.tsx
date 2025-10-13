@@ -1,7 +1,7 @@
 "use client";
 
-import { useLanguage } from "../contexts/language-context";
-import AnimatedSection from "./animated-section";
+import { useLanguage } from "../../contexts/language-context";
+import AnimatedSection from "../shared/animated-section";
 
 export default function OrderProcess() {
 	const { language, t } = useLanguage();

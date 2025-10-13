@@ -1,9 +1,9 @@
 "use client";
 
+import { useLanguage } from "@/contexts/language-context";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Button } from "./ui/button";
-import { useLanguage } from "../contexts/language-context";
+import { Button } from "../ui/button";
 
 interface MapboxInputProps {
 	placeholder: string;

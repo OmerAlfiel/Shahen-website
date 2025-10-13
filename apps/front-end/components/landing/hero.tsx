@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useLanguage } from "../contexts/language-context";
-import MapboxInput from "./mapbox-input";
-import TruckPicker from "./modals/truck-picker";
-import DateTimePicker, { DateTimePickerValue } from "./modals/date-time-picker";
-import LoadTypePicker, { LoadTypePickerValue } from "./modals/load-type-picker";
-import { useQuote } from "../hooks/use-quote";
+import { useLanguage } from "../../contexts/language-context";
+import MapboxInput from "../shared/mapbox-input";
+import TruckPicker from "../modals/truck-picker";
+import DateTimePicker, {
+	DateTimePickerValue,
+} from "../modals/date-time-picker";
+import LoadTypePicker, {
+	LoadTypePickerValue,
+} from "../modals/load-type-picker";
+import { useQuote } from "../../hooks/use-quote";
 
 export default function Hero() {
 	const { language } = useLanguage();

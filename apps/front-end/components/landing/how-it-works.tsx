@@ -1,6 +1,6 @@
 "use client";
 
-import { useLanguage } from "../contexts/language-context";
+import { useLanguage } from "../../contexts/language-context";
 
 export default function HowItWorks() {
 	const { language, t } = useLanguage();

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { useLanguage } from "../contexts/language-context";
-import AnimatedSection from "./animated-section";
+import { useLanguage } from "../../contexts/language-context";
+import AnimatedSection from "../shared/animated-section";
 
 export default function Partners() {
 	const { language } = useLanguage();

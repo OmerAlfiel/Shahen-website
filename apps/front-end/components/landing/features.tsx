@@ -1,8 +1,8 @@
 "use client";
 
 import { Package, Headphones, MapPin } from "lucide-react";
-import { useLanguage } from "../contexts/language-context";
-import AnimatedSection from "./animated-section";
+import { useLanguage } from "../../contexts/language-context";
+import AnimatedSection from "../shared/animated-section";
 
 export default function Features() {
 	const { t } = useLanguage();

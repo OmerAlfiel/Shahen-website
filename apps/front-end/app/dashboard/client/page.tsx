@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useLanguage } from "../../contexts/language-context";
+import { useLanguage } from "../../../contexts/language-context";
 
 export default function DashboardPage() {
 	const { t } = useLanguage();

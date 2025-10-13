@@ -1,8 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/language-context";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import React from "react";
-import { useLanguage } from "../contexts/language-context";
 import AnimatedSection from "./animated-section";
 
 export default function Footer() {

@@ -1,9 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/language-context";
 import { useState, useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useLanguage } from "../contexts/language-context";
-import AnimatedSection from "./animated-section";
+import AnimatedSection from "../shared/animated-section";
 
 export default function TruckTypes() {
 	const { language } = useLanguage();

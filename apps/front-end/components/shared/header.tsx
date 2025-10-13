@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useLanguage } from "../contexts/language-context";
-import { Button } from "./ui/button";
+import { useLanguage } from "@/contexts/language-context";
+import { Button } from "../ui/button";
 
 const Header: React.FC = () => {
 	const { language, setLanguage, t } = useLanguage();

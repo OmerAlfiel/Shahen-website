@@ -8,7 +8,7 @@ import { Textarea } from "../../components/ui/textarea";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { useContact } from "../../hooks/use-contact";
 import { ContactFormData } from "../../services/contact-api";
-import AnimatedSection from "../../components/animated-section";
+import AnimatedSection from "../../components/shared/animated-section";
 
 export default function ContactPage() {
 	const { language, t } = useLanguage();

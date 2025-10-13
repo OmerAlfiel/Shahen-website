@@ -1,8 +1,8 @@
 "use client";
 
+import { useLanguage } from "@/contexts/language-context";
 import React, { useEffect, useState } from "react";
-import AnimatedSection from "./animated-section";
-import { useLanguage } from "../contexts/language-context";
+import AnimatedSection from "../shared/animated-section";
 
 export default function ServiceTypes() {
 	const { language, t } = useLanguage();
