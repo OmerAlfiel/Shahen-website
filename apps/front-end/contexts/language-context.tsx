@@ -25,7 +25,7 @@ const translations = {
 		about: "عن المنصة",
 		contact: "اتصل بنا",
 		login: "تسجيل الدخول",
-		logo: "شحن",
+		logo: "نايل سبارك للتقنية",
 
 		// Hero
 		heroTitle: "انقل بضاعتك وحمولاتك أينما ترغب بطريقه سهله وآمنة.",
@@ -61,7 +61,7 @@ const translations = {
 		// How It Works
 		howItWorksTitle: "سائقي شاحنات متعهدين ومرخصين، كيف يتم ذلك؟",
 		howItWorksDesc:
-			"نتحقق، نشحن بعناية من نظامية السائقين ورخص الشركات التابعين لها. وبذلك التحقق تم عبر ربط منصة شحن بمنصة وصل التابعة لهيئة النقل وبهدف ذلك إلى تنظيم وإدارة عمليات النقل البري داخل المملكة بشكل آمن وفعال، كما يمكن ذلك الربط من ضبط ومراقبة أنشطة النقل البري، ورصد بيانات الرحلات المنفذة وتنظيم عمليات نقل البضائع ورفع جودتها وتحقيق أعلى معايير الأمن والسلامة.",
+			"نتحقق، نشحن بعناية من نظامية السائقين ورخص الشركات التابعين لها. وبذلك التحقق تم عبر ربط منصة نايل سبارك للتقنية بمنصة وصل التابعة لهيئة النقل وبهدف ذلك إلى تنظيم وإدارة عمليات النقل البري داخل المملكة بشكل آمن وفعال، كما يمكن ذلك الربط من ضبط ومراقبة أنشطة النقل البري، ورصد بيانات الرحلات المنفذة وتنظيم عمليات نقل البضائع ورفع جودتها وتحقيق أعلى معايير الأمن والسلامة.",
 
 		// Order Process
 		howToOrder: "آلية الطلب؟",
@@ -103,10 +103,10 @@ const translations = {
 		// Service Types
 		individualShipping: "شحن للأفراد",
 		individualDesc:
-			"نوفر في شحن أيضا خدمات مميزة لعملائنا الأفراد ولا يقتصر عملنا على الشركات فقط حيث نوفر الشاحنات المتوسطة والصغيرة لنقل الأثاث أو العفش أو لتوصيل الثلاث أو الخمس أو العشر أو الخمسة عشر طن.",
+			"نوفر في نايل سبارك للتقنية أيضا خدمات مميزة لعملائنا الأفراد ولا يقتصر عملنا على الشركات فقط حيث نوفر الشاحنات المتوسطة والصغيرة لنقل الأثاث أو العفش أو لتوصيل الثلاث أو الخمس أو العشر أو الخمسة عشر طن.",
 		serviceProviderShipping: "مزودي الخدمة",
 		serviceProviderDesc:
-			"لديك شركة نقليات أو تملك شاحنة، شحن يوصلك بعملك في مختلف مدن المملكة حيث تكون، مما يجعل من عملك أكثر كفاءة واحترافية كما توفر شحن منصة إلكترونية للمحلي.",
+			"لديك شركة نقليات أو تملك شاحنة، نايل سبارك للتقنية يوصلك بعملك في مختلف مدن المملكة حيث تكون، مما يجعل من عملك أكثر كفاءة واحترافية كما توفر نايل سبارك للتقنية منصة إلكترونية للمحلي.",
 		companyShipping: "شحن للشركات",
 		companyDesc:
 			"نقدم للشركات خيارات متعددة من أنواع وأحجام الشاحنات بحسب ما يتناسب مع منتجات الشركة لنقلها إلى أي مدينة أو منطقة داخل السعودية بالإضافة إلى تأميناً على البضائع وتتبع",
@@ -186,8 +186,9 @@ const translations = {
 		// Contact Page Translations
 		contactHeroTitle: "لنعمل معا يدا بيد على شراكة متميزة",
 		contactHeroSubtitle:
-			"هل تريد الانضمام لنا ؟ حمل تطبيق شحن من متجر التطبيقات على هاتفك الذكي",
-		contactHeroDescription: "نسعد بزيارتك لنا للحصول على استشارة في مكتب شحن",
+			"هل تريد الانضمام لنا ؟ حمل تطبيق نايل سبارك للتقنية من متجر التطبيقات على هاتفك الذكي",
+		contactHeroDescription:
+			"نسعد بزيارتك لنا للحصول على استشارة في مكتب نايل سبارك للتقنية",
 		contactFormTitle: "للتواصل",
 		contactName: "الاسم",
 		contactPhone: "رقم الجوال",
@@ -210,7 +211,7 @@ const translations = {
 		about: "About",
 		contact: "Contact Us",
 		login: "Login",
-		logo: "Shahen",
+		logo: "NileSpark Technologies",
 
 		// Hero
 		heroTitle:
@@ -247,7 +248,7 @@ const translations = {
 		// How It Works
 		howItWorksTitle: "Committed and Licensed Truck Drivers, How Does It Work?",
 		howItWorksDesc:
-			"We verify and ship carefully from the regularity of drivers and licenses of their affiliated companies. This verification was done by linking the shipping platform with the Wasl platform affiliated with the Transport Authority, aiming to organize and manage land transport operations within the Kingdom safely and effectively. This link also enables control and monitoring of land transport activities, tracking data of executed trips, organizing freight transport operations, raising their quality, and achieving the highest safety and security standards.",
+			"We verify and ship carefully from the regularity of drivers and licenses of their affiliated companies. This verification was done by linking the NileSpark Technologies platform with the Wasl platform affiliated with the Transport Authority, aiming to organize and manage land transport operations within the Kingdom safely and effectively. This link also enables control and monitoring of land transport activities, tracking data of executed trips, organizing freight transport operations, raising their quality, and achieving the highest safety and security standards.",
 
 		// Order Process
 		howToOrder: "How to Order?",
@@ -292,7 +293,7 @@ const translations = {
 			"We also provide distinctive services for our individual customers, and our work is not limited to companies only, as we provide medium and small trucks for transporting furniture or belongings or for delivering three, five, ten, or fifteen tons.",
 		serviceProviderShipping: "Service Providers",
 		serviceProviderDesc:
-			"If you have a freight company or own a truck, shipping connects you with your work in various cities of the Kingdom wherever you are, making your work more efficient and professional. Shipping also provides an electronic platform for local businesses.",
+			"If you have a freight company or own a truck, NileSpark Technologies connects you with your work in various cities of the Kingdom wherever you are, making your work more efficient and professional. NileSpark Technologies also provides an electronic platform for local businesses.",
 		companyShipping: "Company Shipping",
 		companyDesc:
 			"We offer companies multiple options of truck types and sizes according to what suits the company's products to transport them to any city or region within Saudi Arabia, in addition to insurance on goods and tracking",
@@ -373,9 +374,9 @@ const translations = {
 		contactHeroTitle:
 			"Let's work together hand in hand on a distinguished partnership",
 		contactHeroSubtitle:
-			"Do you want to join us? Download the Shahen app from the app store on your smartphone",
+			"Do you want to join us? Download the NileSpark Technologies app from the app store on your smartphone",
 		contactHeroDescription:
-			"We are happy to have you visit us for a consultation at the Shahen office",
+			"We are happy to have you visit us for a consultation at the NileSpark Technologies office",
 		contactFormTitle: "Contact",
 		contactName: "Name",
 		contactPhone: "Phone Number",
