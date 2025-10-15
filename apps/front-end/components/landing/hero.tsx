@@ -440,7 +440,7 @@ export default function Hero() {
 					</p>
 					<div className='hero-download-badges flex justify-center gap-6 sm:gap-8 flex-wrap mt-8 sm:mt-11'>
 						<a
-							href='https://play.google.com/store/apps/details?id=com.shahen&gl=SA'
+							href='https://play.google.com/store/apps/details?id=com.logistics&gl=SA'
 							target='_blank'
 							rel='noopener noreferrer'
 							className='inline-block'>
@@ -454,7 +454,7 @@ export default function Hero() {
 							/>
 						</a>
 						<a
-							href='https://apps.apple.com/sa/app/shahen-%D8%B4%D8%AD%D9%86/id1568118147'
+							href='https://apps.apple.com/sa/app/logistics/id1568118147'
 							target='_blank'
 							rel='noopener noreferrer'
 							className='inline-block'>

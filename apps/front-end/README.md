@@ -1,6 +1,6 @@
-# Shahen - Next.js Application
+# Logistics Platform - Next.js Application
 
-This is a [Next.js](https://nextjs.org/) project for Shahen, a freight and cargo transportation service platform in Saudi Arabia.
+This is a [Next.js](https://nextjs.org/) project for a freight and cargo transportation service platform in Saudi Arabia.
 
 ## 🚀 Getting Started
 

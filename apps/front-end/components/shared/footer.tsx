@@ -94,28 +94,28 @@ export default function Footer() {
 							<span className='text-gray-400'>{t("contactMethods")}</span>
 							<div className='flex gap-3'>
 								<a
-									href='https://youtube.com/@shahen'
+									href='https://youtube.com/@logistics'
 									target='_blank'
 									rel='noopener noreferrer'
 									className='w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-all duration-300 hover:scale-110 hover:rotate-12'>
 									<Youtube className='w-5 h-5' />
 								</a>
 								<a
-									href='https://instagram.com/shahen'
+									href='https://instagram.com/logistics'
 									target='_blank'
 									rel='noopener noreferrer'
 									className='w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-all duration-300 hover:scale-110 hover:rotate-12'>
 									<Instagram className='w-5 h-5' />
 								</a>
 								<a
-									href='https://facebook.com/shahen'
+									href='https://facebook.com/logistics'
 									target='_blank'
 									rel='noopener noreferrer'
 									className='w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-all duration-300 hover:scale-110 hover:rotate-12'>
 									<Facebook className='w-5 h-5' />
 								</a>
 								<a
-									href='https://twitter.com/shahen'
+									href='https://twitter.com/logistics'
 									target='_blank'
 									rel='noopener noreferrer'
 									className='w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-all duration-300 hover:scale-110 hover:rotate-12'>
@@ -153,7 +153,7 @@ export default function Footer() {
 						</p>
 						<div className='flex flex-wrap justify-center gap-4'>
 							<a
-								href='https://play.google.com/store/apps/details?id=com.shahen&gl=SA'
+								href='https://play.google.com/store/apps/details?id=com.logistics&gl=SA'
 								target='_blank'
 								rel='noopener noreferrer'
 								className='hover:opacity-80 transition-all hover:scale-105'>
@@ -171,7 +171,7 @@ export default function Footer() {
 								</div>
 							</a>
 							<a
-								href='https://apps.apple.com/sa/app/shahen-%D8%B4%D8%AD%D9%86/id1568118147'
+								href='https://apps.apple.com/sa/app/logistics/id1568118147'
 								target='_blank'
 								rel='noopener noreferrer'
 								className='hover:opacity-80 transition-all hover:scale-105'>

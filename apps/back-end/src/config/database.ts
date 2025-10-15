@@ -64,7 +64,7 @@ function resolveDbConfig(): ResolvedDbConfig {
 		(!isPlaceholder(process.env.DB_NAME) && process.env.DB_NAME) ||
 		fromUrl.database ||
 		process.env.PGDATABASE ||
-		"shahen_logistics";
+		"logistics_platform";
 
 	return { host, port, username, password, database };
 }

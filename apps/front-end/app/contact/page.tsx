@@ -80,7 +80,7 @@ export default function ContactPage() {
 						alt={
 							language === "ar"
 								? "تواصلوا مع شحن واحجزوا شاحنة عبر الإنترنت الآن"
-								: "Contact Shahen and book a truck online now"
+								: "Contact us and book a truck online now"
 						}
 						className='w-full h-full object-cover'
 					/>

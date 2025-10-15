@@ -1,7 +1,7 @@
 {
-	"name": "shahen-backend",
-	"version": "1.0.1",
-	"description": "Backend API for Shahen logistics website",
+	"name": "logistics-backend",
+	"version": "1.0.0",
+	"description": "Backend API for Logistics platform website",
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",

@@ -1,10 +1,10 @@
-# Shahen Logistics Website
+# Logistics Website
 
 A full-stack logistics platform built with React (TypeScript) frontend and Node.js/Express backend with PostgreSQL database.
 
 ## 🚀 Production Deployment Guide
 
-This guide covers deploying your Shahen Logistics website to production using modern hosting platforms.
+This guide covers deploying your Logistics website to production using modern hosting platforms.
 
 ### Prerequisites
 
@@ -55,7 +55,7 @@ GENERATE_SOURCEMAP=false
 
 1. **Visit [Railway.app](https://railway.app)** and sign up with GitHub
 2. **Create New Project** → **Deploy from GitHub repo**
-3. **Select your repository**: `Shahen-website`
+3. **Select your repository**: `Logistics-website`
 
 4. **Deploy Backend**:
    - Click **"+ New"** → **"GitHub Repo"**
@@ -320,7 +320,7 @@ Most platforms provide automatic SSL certificates for custom domains.
 ```bash
 # Clone repository
 git clone <your-repo-url>
-cd Shahen-website
+cd Logistics-website
 
 # Install dependencies
 npm install
@@ -357,4 +357,4 @@ npm run dev
 
 **Total Time**: ~15-30 minutes
 
-Your Shahen Logistics website will be live and production-ready! 🚀
+Your Logistics website will be live and production-ready! 🚀

@@ -1,6 +1,6 @@
-# 🚀 Shahen Logistics - Production Deployment Guide
+# 🚀 Logistics Platform - Production Deployment Guide
 
-This guide provides **complete manual deployment steps** for the Shahen Logistics website using modern hosting platforms (no Docker required).
+This guide provides **complete manual deployment steps** for the Logistics Platform website using modern hosting platforms (no Docker required).
 
 ## 📋 Project Overview
 
@@ -19,7 +19,7 @@ This guide provides **complete manual deployment steps** for the Shahen Logistic
 ## 📁 Project Structure
 
 ```
-Shahen-website/
+Logistics-website/
 ├── apps/
 │   ├── back-end/          # Express.js API
 │   └── front-end/         # React.js Application
@@ -59,7 +59,7 @@ git push origin main
 2. Sign up with your **GitHub account**
 3. Click **"New Project"**
 4. Select **"Deploy from GitHub repo"**
-5. Choose your **"Shahen-website"** repository
+5. Choose your **"Logistics-website"** repository
 
 ##### 3. Deploy PostgreSQL Database
 
@@ -74,7 +74,7 @@ git push origin main
 1. Click **"+ New"** → **"GitHub Repo"**
 2. Select your repository again
 3. Railway will detect multiple services, select or configure:
-   - **Service Name**: `shahen-backend`
+   - **Service Name**: `logistics-backend`
    - **Root Directory**: `apps/back-end`
    - **Build Command**: `npm install && npm run build`
    - **Start Command**: `npm start`
@@ -106,7 +106,7 @@ LOG_LEVEL=error
 1. Click **"+ New"** → **"GitHub Repo"**
 2. Select your repository again
 3. Configure:
-   - **Service Name**: `shahen-frontend`
+   - **Service Name**: `logistics-frontend`
    - **Root Directory**: `apps/front-end`
    - **Build Command**: `npm install && npm run build`
    - **Start Command**: `npx serve -s build -l $PORT`
@@ -125,8 +125,8 @@ GENERATE_SOURCEMAP=false
 ##### 8. Update Cross-Service URLs
 
 1. After both services deploy, note their URLs:
-   - Backend: `https://shahen-backend-production-xxx.up.railway.app`
-   - Frontend: `https://shahen-frontend-production-xxx.up.railway.app`
+   - Backend: `https://logistics-backend-production-xxx.up.railway.app`
+   - Frontend: `https://logistics-frontend-production-xxx.up.railway.app`
 2. **Update backend** `FRONTEND_URL` with the frontend URL
 3. **Update frontend** `REACT_APP_API_BASE_URL` with backend URL + `/api`
 4. **Wait for automatic redeployment**
@@ -160,7 +160,7 @@ Follow Railway steps 1-5 above for backend and database only.
 
 1. Click **"New Project"**
 2. **"Import Git Repository"**
-3. Select your **"Shahen-website"** repository
+3. Select your **"Logistics-website"** repository
 
 ##### 3. Configure Build Settings
 
@@ -184,7 +184,7 @@ GENERATE_SOURCEMAP=false
 ##### 5. Deploy & Update Backend
 
 1. Deploy on Vercel
-2. Note your Vercel URL: `https://shahen-website.vercel.app`
+2. Note your Vercel URL: `https://logistics-website.vercel.app`
 3. Update Railway backend `FRONTEND_URL` with your Vercel URL
 
 ---
@@ -367,7 +367,7 @@ npx serve -s build -l 3000
 ### **1. Health Checks**
 
 - **Backend Health**: `https://your-backend-url/api/health`
-  - Should return: `{"status":"OK","message":"Shahen Backend API is running"}`
+  - Should return: `{"status":"OK","message":"Logistics Backend API is running"}`
 - **Frontend Load**: `https://your-frontend-url`
   - Should load without console errors
 
@@ -549,7 +549,7 @@ If you encounter issues:
 - [Render Documentation](https://render.com/docs)
 - [DigitalOcean Apps](https://docs.digitalocean.com/products/app-platform)
 
-**Your Shahen Logistics website will be live and production-ready! 🎉**
+**Your Logistics Platform website will be live and production-ready! 🎉**
 
 ---
 
@@ -750,7 +750,7 @@ If you encounter issues:
 6. **Domain**: Point custom domain (optional)
 7. **Monitor**: Set up logging and monitoring
 
-Your Shahen Logistics website will be live and production-ready! 🎉
+Your Logistics Platform website will be live and production-ready! 🎉
 
 ---
 

@@ -6,7 +6,7 @@ import "../styles/basic.css";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-	title: "Shahen - شحن",
+	title: "Logistics Platform",
 	description:
 		"Reliable freight and cargo transportation services in Saudi Arabia",
 	icons: {
