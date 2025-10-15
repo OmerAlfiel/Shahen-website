@@ -89,10 +89,10 @@ const translations = {
 		aboutUs: "من نحن",
 		aboutDesc:
 			"نقدم للشركات خيارات متعددة من أنواع وأحجام الشاحنات تتناسب مع منتجات الشركة لنقلها إلى أي مدينة أو منطقة داخل السعودية بالإضافة إلى تأميناً على البضائع وتتبع للشاحنات و مدير حساب خاص للشركة لتقديم المساعدة اللازمة وخدمة الطلبات وممیزات أخرى، أكثر تفهم للنقليات و النقل البري، ليكون أكثر سهولة وأمان.",
-		nationalNumber: "الرقم الوطني الموحد للمنشأة : 7015321933",
+		nationalNumber: "الرقم الوطني الموحد للمنشأة : 1933",
 		contactMethods: "وسائل الاتصال",
 		copyright:
-			"© حقوق النشر 2025 جميع الحقوق محفوظة لشركة COMPANY FIKR FOR COMMUNICATIONS AND INFORMATION TECHNOLOGY",
+			"© حقوق النشر 2025 جميع الحقوق محفوظة لشركة COMPANY   COMMUNICATIONS AND INFORMATION TECHNOLOGY",
 
 		// App Download
 		downloadApp:
@@ -197,7 +197,7 @@ const translations = {
 		contactSubmit: "تواصل معنا",
 		contactInfoTitle: "للتواصل",
 		contactAddressLabel: "العنوان",
-		contactAddressValue: "المهندس مساعد العنقري، السليمانية، الرياض 12245",
+		contactAddressValue: "المهندس    الرياض 145",
 		contactPhoneLabel: "رقم الهاتف",
 		contactSocialLabel: "مواقع التواصل الاجتماعي",
 		contactWhatsApp: "واتس اب",
@@ -385,8 +385,7 @@ const translations = {
 		contactSubmit: "Contact Us",
 		contactInfoTitle: "Contact",
 		contactAddressLabel: "Address",
-		contactAddressValue:
-			"Al Muhandis Masaid Al Angari, As Sulimaniyah, Riyadh 12245",
+		contactAddressValue: "Al Muhandis, Riyadh 145",
 		contactPhoneLabel: "Phone Number",
 		contactSocialLabel: "Social Media",
 		contactWhatsApp: "WhatsApp",

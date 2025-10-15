@@ -275,7 +275,7 @@ export default function ContactPage() {
 											<h3 className='text-lg font-semibold text-gray-900 mb-2'>
 												{t("contactPhoneLabel")}
 											</h3>
-											<p className='text-gray-700 font-medium'>٠١١٥٢٠٦١١١</p>
+											<p className='text-gray-700 font-medium'>0500381369</p>
 										</div>
 
 										{/* Social Media */}

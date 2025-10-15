@@ -181,6 +181,6 @@ The easiest way to deploy is using the [Vercel Platform](https://vercel.com/new)
 
 For support, contact us at:
 
-- Phone: ٠١١٥٢٠٦١١١
+- Phone: 0500381369
 - Email: Available on website
 - WhatsApp: Available on website
