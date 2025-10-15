@@ -431,7 +431,7 @@ export default function Hero() {
 					)}
 				</div>
 
-				{/* Download / partnership area within hero diagonal */}
+				{/* Download / partnership area within hero diagonal 
 				<div className='hero-download-area compact-mobile'>
 					<p>
 						{language === "ar"
@@ -468,7 +468,7 @@ export default function Hero() {
 							/>
 						</a>
 					</div>
-				</div>
+				</div>*/}
 			</div>
 		</div>
 	);

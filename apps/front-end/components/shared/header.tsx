@@ -177,19 +177,11 @@ const Header: React.FC = () => {
 					{/* Logo Section */}
 					<div className='flex-shrink-0'>
 						<Link href='/' className='flex items-center cursor-pointer'>
-							{language === "ar" ? (
-								<img
-									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahenLogoUrdu-XV3pQbfUgCssBVI00Jfa7org5FbYHk.svg'
-									alt='Shahen Logo'
-									className='h-10 w-auto'
-								/>
-							) : (
-								<img
-									src='https://hebbkx1anhila5yf.public.blob.vercel-storage.com/shahen-logo-Xc4HHjimnrigekeA868rIKYRlyheij.svg'
-									alt='Shahen Logo'
-									className='h-10 w-auto'
-								/>
-							)}
+							<img
+								src='/NileSpark Technologies Logo.png'
+								alt='NileSpark Technologies Logo'
+								className='h-10 w-auto'
+							/>
 						</Link>
 					</div>
 				</div>
