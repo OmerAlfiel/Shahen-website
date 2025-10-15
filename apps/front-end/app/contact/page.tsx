@@ -145,8 +145,8 @@ export default function ContactPage() {
 												</div>
 												<p className='font-bold'>
 													{language === "ar"
-														? "شكراً لإختيارك منصة شحن"
-														: "Thank you for choosing Shahen platform"}
+														? "شكراً لإختيارك شركة نايل سبارك للتقنية"
+														: "Thank you for choosing NileSpark Technologies"}
 												</p>
 												<p>
 													{language === "ar"
@@ -285,7 +285,7 @@ export default function ContactPage() {
 											</h3>
 											<div className={`flex gap-3 justify-center`}>
 												<a
-													href='https://www.facebook.com/SHAHEN-SA-105402241801913'
+													href='https://www.facebook.com/nilesparktechnologies'
 													target='_blank'
 													rel='noopener noreferrer'
 													className='w-8 h-8 rounded-lg border-2 border-emerald-600 flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors'
@@ -293,7 +293,7 @@ export default function ContactPage() {
 													<Facebook className='w-4 h-4' />
 												</a>
 												<a
-													href='https://www.instagram.com/shahenapp'
+													href='https://www.instagram.com/nilesparktechnologies'
 													target='_blank'
 													rel='noopener noreferrer'
 													className='w-8 h-8 rounded-lg border-2 border-emerald-600 flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors'
@@ -301,7 +301,7 @@ export default function ContactPage() {
 													<Instagram className='w-4 h-4' />
 												</a>
 												<a
-													href='https://twitter.com/shahenapp'
+													href='https://twitter.com/nilesparktechnologies'
 													target='_blank'
 													rel='noopener noreferrer'
 													className='w-8 h-8 rounded-lg border-2 border-emerald-600 flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors'
@@ -315,7 +315,7 @@ export default function ContactPage() {
 													</svg>
 												</a>
 												<a
-													href='https://www.linkedin.com/company/shahen-%D8%B4%D8%AD%D9%86/'
+													href='https://www.linkedin.com/company/nilespark-technologies'
 													target='_blank'
 													rel='noopener noreferrer'
 													className='w-8 h-8 rounded-lg border-2 border-emerald-600 flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors'
@@ -323,7 +323,7 @@ export default function ContactPage() {
 													<Linkedin className='w-4 h-4' />
 												</a>
 												<a
-													href='https://www.youtube.com/channel/UCxRUhbWAfLkQldm3QwA73UQ'
+													href='https://www.youtube.com/channel/nilesparktechnologies'
 													target='_blank'
 													rel='noopener noreferrer'
 													className='w-8 h-8 rounded-lg border-2 border-emerald-600 flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors'
@@ -336,7 +336,7 @@ export default function ContactPage() {
 										{/* WhatsApp */}
 										<div className='pt-4 border-t border-gray-200'>
 											<a
-												href='https://wa.me/message/TBZQAQHF6WDLN1'
+												href='https://wa.me/message/NILESPARKTECHNOLOGIES'
 												target='_blank'
 												rel='noopener noreferrer'
 												className={`flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium justify-center`}>
